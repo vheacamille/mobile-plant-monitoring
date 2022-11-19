@@ -1,24 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import ResponsiveDrawerComp from './components/Drawer/ResponsiveDrawerComp';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Home from './pages/Home';
+import Plants from './pages/Plants';
+import WaterPHLevel from './pages/WaterPHLevel';
+import LightMeter from './pages/LightMeter';
+import History from './pages/History';
 
 function App() {
   return (
+    <Router>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ResponsiveDrawerComp></ResponsiveDrawerComp>
+
+      <Routes>
+        <Route exact path="/" element={<Home/>}/>
+        <Route exact path="/plants" element={<Plants />} />
+        <Route exact path="waterPhLevel" element={<WaterPHLevel />} />
+        <Route exact path="/lightMeter" element={<LightMeter />} />
+        <Route exact path="/history" element={<History />} />
+      </Routes>
     </div>
+    </Router>
   );
 }
 
