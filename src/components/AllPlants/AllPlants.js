@@ -10,6 +10,7 @@ import {
   createTheme,
   ThemeProvider,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import pechay from "./imgs/pechay.png";
 import mustasa from "./imgs/mustard-greens.png";
 import okra from "./imgs/okra.png";
@@ -41,7 +42,13 @@ const AllPlants = () => {
             </CardActionArea>
             <CardActions style={{ justifyContent: "center" }}>
               <ThemeProvider theme={theme}>
-                <Button size="small" variant="outlined" color="secondary">
+                <Button
+                  size="small"
+                  variant="outlined"
+                  color="secondary"
+                  component={Link}
+                  to="/plantDetails/Pechay"
+                >
                   View Plant
                 </Button>
               </ThemeProvider>

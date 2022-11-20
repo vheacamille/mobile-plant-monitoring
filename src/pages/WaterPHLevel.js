@@ -6,6 +6,7 @@ import firebaseDb from "../components/Database/firebaseDbConfig";
 
 const WaterPHLevel = () => {
   const [waterLevel, setWaterLevel] = useState("0");
+  const [timeUpdated, setTimeUpdated] = useState(getCurrentDateAndTime());
 
   //VCV TEST CODE ONLY
   useEffect(() => {
@@ -16,6 +17,7 @@ const WaterPHLevel = () => {
       onValue(lightMeterRef, (snapshot) => {
         if (snapshot.exists()) {
           setWaterLevel(parseFloat(JSON.stringify(snapshot.val())));
+          setTimeUpdated(getCurrentDateAndTime());
         } else {
           setWaterLevel(parseFloat("0"));
         }
@@ -60,9 +62,7 @@ const WaterPHLevel = () => {
               stops,
             }}
           />
-          <Item>
-            Current Water PH Level (%) as of {getCurrentDateAndTime()}{" "}
-          </Item>
+          <Item>Current Water PH Level (%) as of {timeUpdated} </Item>
         </Grid>
       </Grid>
     </>

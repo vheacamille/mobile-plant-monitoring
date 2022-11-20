@@ -6,6 +6,7 @@ import firebaseDb from "../components/Database/firebaseDbConfig";
 
 const LightMeter = () => {
   const [lightMeter, setLightMeter] = useState("0");
+  const [timeUpdated, setTimeUpdated] = useState(getCurrentDateAndTime());
 
   // VCV: TEST ONLY. Replace with correct firebase
   useEffect(() => {
@@ -16,6 +17,7 @@ const LightMeter = () => {
       onValue(lightMeterRef, (snapshot) => {
         if (snapshot.exists()) {
           setLightMeter(parseFloat(JSON.stringify(snapshot.val())));
+          setTimeUpdated(getCurrentDateAndTime());
         } else {
           setLightMeter(parseFloat("0"));
         }
@@ -67,9 +69,7 @@ const LightMeter = () => {
               labelText={parseFloat(lightMeter)}
             />
           </div>
-          <Item>
-            Current Light Meter Value as of {getCurrentDateAndTime()}{" "}
-          </Item>
+          <Item>Current Light Meter Value as of {timeUpdated} </Item>
         </Grid>
       </Grid>
     </>
