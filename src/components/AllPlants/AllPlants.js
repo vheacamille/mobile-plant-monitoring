@@ -149,7 +149,7 @@ const AllPlants = () => {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  Coming Soon
+                  Soon
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -159,6 +159,12 @@ const AllPlants = () => {
               </Button>
             </CardActions>
           </Card>
+        </Grid>
+        <Grid item xs={0} sm={1} zeroMinWidth>
+          <Card />
+        </Grid>
+        <Grid item xs={1} sm={3}>
+          <Card />
         </Grid>
       </Grid>
     </>
