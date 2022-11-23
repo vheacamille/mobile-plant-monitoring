@@ -1,0 +1,63 @@
+
+
+
+.welcomecard{
+   
+    position:absolute;
+    width: fit-content;
+    width: 50%;
+    height: 140%;
+    text-align:center;
+    box-shadow: 0 3px 10px  rgb(124, 223, 117);
+    border-radius: 100px;
+    border: 0.0005px solid rgb(124, 223, 117);
+   
+   
+  
+
+}
+
+.welcome{
+    position:relative;
+    font-family: sans-serif;
+    font-size: 50px;
+    width: fit-content;
+    text-align:center;
+    margin-left: 180px;
+    color: black;
+
+    
+   
+
+}
+
+.binhi{
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 80px;
+    text-align:center;
+    color: black;
+}
+.cardmedia:hover{
+    box-shadow: 5px 10px 20px 1px rgba(0, 0, 0, 0.253)!important;
+    overflow:hidden;
+    transform:scale(1);
+    transition:transform 0.5s ease;
+
+}
+.overflow{
+    overflow:hidden;
+    
+}
+.cardmedia-img-top{
+    transform:scale(1);
+    transition:transform 0.5s ease;
+}
+
+.cardmedia-img-top:hover{
+    transform:scale(1.8);
+}
+.img{
+    transform:scale(1);
+    transition:transform 0.5s ease;
+}

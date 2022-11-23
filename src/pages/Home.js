@@ -1,13 +1,21 @@
+
 import { createTheme, styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { Card } from "@mui/material";
+import { Card,  CardMedia } from "@mui/material";
 import PlantDetails from "../components/Plant/PlantDetails";
+import "./Home.style.css";
+import pechay from "../components/AllPlants/imgs/pechay.png";
+import mustasa from "../components/AllPlants/imgs//mustard-greens.png";
+import okra from "../components/AllPlants/imgs/okra.png";
+import talong from "../components/AllPlants/imgs/talong.png";
+import sili from "../components/AllPlants/imgs/sili.jpg";
+
 
 const Home = () => {
   const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+    backgroundColor: theme.palette.mode === "dark" ? "#54C571" : "#fff",
     ...theme.typography.body2,
     padding: theme.spacing(1),
     textAlign: "center",
@@ -16,17 +24,33 @@ const Home = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
+      <Grid className="cardUI" container spacing={2}>
+        <Grid item xs={4} className="cardUI">
+          <Card className="cardUI"/>
+        </Grid>
+        <Grid item xs={4} zeroMinWidthclassName="cardUI">
+          <Item className="welcomecard text-center shadow">
+            <h2 className="welcome">WELCOME TO</h2><h1 className="binhi"> Binhi</h1>
+            <div className="card text-center shadow">
+              <div className="overflow">
+              <CardMedia className= "cardmedia-img-top" component="img"height="100"image={pechay}alt="pechay"/>
+              <CardMedia className= "cardmedia-img-top" component="img"height="100"image={mustasa}alt="mustasa"/>
+              <CardMedia className= "cardmedia-img-top" component="img"height="100"image={talong}alt="talong"/>
+             <CardMedia className= "cardmedia-img-top" component="img"height="100"image={okra}alt="okra"/>
+              <CardMedia className= "cardmedia-img-top" component="img"height="100"image={sili}alt="sili"/> 
+              </div>
+            </div>
+           
+           
+          </Item>
+          
+        </Grid>
+        {/* <Grid item xs={4}>
           <Card />
-        </Grid>
-        <Grid item xs={4} zeroMinWidth>
-          <Item></Item>
-        </Grid>
-        <Grid item xs={4}>
-          <Card />
-        </Grid>
+        </Grid> */}
       </Grid>
+
+      
     </>
   );
 };
@@ -34,11 +58,11 @@ const Home = () => {
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#81c784",
-      light: "#c8e6c9",
+      main: "#54C571",
+      light: "#54C571",
     },
     secondary: {
-      main: "#00a36e",
+      main: "#54C571",
     },
   },
   MuiButton: {
@@ -46,7 +70,7 @@ const theme = createTheme({
       {
         props: { variant: "openedTab" },
         style: {
-          color: "#81c784",
+          color: "#54C571",
         },
       },
     ],
