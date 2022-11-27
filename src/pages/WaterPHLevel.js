@@ -13,7 +13,7 @@ const WaterPHLevel = () => {
     setWaterLevel("0");
     const getWaterLevel = async () => {
       const db = getDatabase(firebaseDb);
-      const lightMeterRef = await ref(db, "/WaterLevel/WATER_LEVEL");
+      const lightMeterRef = await ref(db, "/FirebaseIOT/humidity");
       onValue(lightMeterRef, (snapshot) => {
         if (snapshot.exists()) {
           setWaterLevel(parseFloat(JSON.stringify(snapshot.val())));

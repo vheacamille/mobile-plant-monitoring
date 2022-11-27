@@ -33,7 +33,7 @@ const PlantDetails = () => {
 
     const getHumidity = async () => {
       const db = getDatabase(firebaseDb);
-      const humidityRef = await ref(db, "/WaterLevel/WATER_LEVEL");
+      const humidityRef = await ref(db, "/FirebaseIOT/humidity");
       onValue(humidityRef, (snapshot) => {
         if (snapshot.exists()) {
           setHumidity(parseFloat(JSON.stringify(snapshot.val())));
@@ -45,7 +45,7 @@ const PlantDetails = () => {
 
     const getTemperature = async () => {
       const db = getDatabase(firebaseDb);
-      const temperatureRef = await ref(db, "/WaterLevel/WATER_LEVEL");
+      const temperatureRef = await ref(db, "/FirebaseIOT/temperature");
       onValue(temperatureRef, (snapshot) => {
         if (snapshot.exists()) {
           setTemperature(parseFloat(JSON.stringify(snapshot.val())));
@@ -57,7 +57,7 @@ const PlantDetails = () => {
 
     const getMoisture = async () => {
       const db = getDatabase(firebaseDb);
-      const moistureRef = await ref(db, "/WaterLevel/WATER_LEVEL");
+      const moistureRef = await ref(db, "/FirebasePlant/moisture");
       onValue(moistureRef, (snapshot) => {
         if (snapshot.exists()) {
           setMoisture(parseFloat(JSON.stringify(snapshot.val())));

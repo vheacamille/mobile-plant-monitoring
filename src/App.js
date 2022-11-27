@@ -7,6 +7,7 @@ import WaterPHLevel from "./pages/WaterPHLevel";
 import LightMeter from "./pages/LightMeter";
 import History from "./pages/History";
 import PlantDetails from "./components/Plant/PlantDetails";
+import AddPlant from "./pages/AddPlant";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
 
         <Routes>
           <Route exact path="/" element={<Home />} />
+          <Route exact path="/addPlant" element={<AddPlant />} />
           <Route exact path="/plants" element={<Plants />} />
           <Route
             exact

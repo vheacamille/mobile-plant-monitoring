@@ -1,14 +1,15 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDyGaTS7DmJCM88RWdatDXRwnvrC3Tv9JI",
-  authDomain: "plant-monitoring-test.firebaseapp.com",
+  apiKey: "AIzaSyDccokTXR5Sp_YELjZapLC3JXyCWa57xXo",
+  authDomain: "binhi-data.firebaseapp.com",
   databaseURL:
-    "https://plant-monitoring-test-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "plant-monitoring-test",
-  storageBucket: "plant-monitoring-test.appspot.com",
-  messagingSenderId: "552628922907",
-  appId: "1:552628922907:web:0b07388f1cbb15bf9366be",
+    "https://binhi-data-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "binhi-data",
+  storageBucket: "binhi-data.appspot.com",
+  messagingSenderId: "230988062905",
+  appId: "1:230988062905:web:87c27e6122bb175ded7b68",
+  measurementId: "G-LYKQD9RXP7",
 };
 
 const firebaseDb = initializeApp(firebaseConfig);

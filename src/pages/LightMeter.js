@@ -13,7 +13,7 @@ const LightMeter = () => {
     setLightMeter("0");
     const getLightMeter = async () => {
       const db = getDatabase(firebaseDb);
-      const lightMeterRef = await ref(db, "/WaterLevel/WATER_LEVEL");
+      const lightMeterRef = await ref(db, "/FirebaseIOT/light");
       onValue(lightMeterRef, (snapshot) => {
         if (snapshot.exists()) {
           setLightMeter(parseFloat(JSON.stringify(snapshot.val())));
