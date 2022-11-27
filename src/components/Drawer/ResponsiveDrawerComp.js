@@ -6,7 +6,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -41,11 +40,10 @@ function ResponsiveDrawerComp(props) {
 
   const listIcons = {
     Home: { index: 0, icon: <HomeIcon />, link: "/" },
-    AddPlant: { index: 1, icon: <AddCircleIcon />, link: "/addPlant" },
-    Plants: { index: 2, icon: <GiIcons.GiPlantSeed />, link: "/plants" },
-    WaterPHLevel: { index: 3, icon: <OpacityIcon />, link: "/waterPhLevel" },
-    LightMeter: { index: 4, icon: <LightbulbIcon />, link: "/lightMeter" },
-    History: { index: 5, icon: <TimelineIcon />, link: "/history" },
+    Plants: { index: 1, icon: <GiIcons.GiPlantSeed />, link: "/plants" },
+    WaterPHLevel: { index: 2, icon: <OpacityIcon />, link: "/waterPhLevel" },
+    LightMeter: { index: 3, icon: <LightbulbIcon />, link: "/lightMeter" },
+    History: { index: 4, icon: <TimelineIcon />, link: "/history" },
   };
 
   const drawer = (
@@ -53,31 +51,29 @@ function ResponsiveDrawerComp(props) {
       <Toolbar />
       <Divider />
       <List>
-        {[
-          "Home",
-          "Add Plant",
-          "Plants",
-          "Water PH Level",
-          "Light Meter",
-          "History",
-        ].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton
-              component={Link}
-              to={listIcons[text.replace(/\s/g, "")].link}
-              selected={tabIndex === listIcons[text.replace(/\s/g, "")].index}
-              onClick={(event) => {
-                handleTabIndex(event, listIcons[text.replace(/\s/g, "")].index);
-              }}
-              disableRipple={true}
-            >
-              <ListItemIcon>
-                {listIcons[text.replace(/\s/g, "")].icon}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {["Home", "Plants", "Water PH Level", "Light Meter", "History"].map(
+          (text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton
+                component={Link}
+                to={listIcons[text.replace(/\s/g, "")].link}
+                selected={tabIndex === listIcons[text.replace(/\s/g, "")].index}
+                onClick={(event) => {
+                  handleTabIndex(
+                    event,
+                    listIcons[text.replace(/\s/g, "")].index
+                  );
+                }}
+                disableRipple={true}
+              >
+                <ListItemIcon>
+                  {listIcons[text.replace(/\s/g, "")].icon}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          )
+        )}
       </List>
       <Divider />
     </div>
