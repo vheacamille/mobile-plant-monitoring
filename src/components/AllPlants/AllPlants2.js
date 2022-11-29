@@ -9,7 +9,11 @@ import {
   Typography,
   createTheme,
   ThemeProvider,
+  ButtonGroup,
 } from "@mui/material";
+import DescriptionIcon from "@mui/icons-material/Description";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Link } from "react-router-dom";
 import pechay from "./imgs/pechay.png";
 import mustasa from "./imgs/mustard-greens.png";
@@ -17,18 +21,22 @@ import okra from "./imgs/okra.png";
 import talong from "./imgs/talong.png";
 import sili from "./imgs/sili.jpg";
 import plant from "./imgs/plant-logo.png";
+import { useState } from "react";
 
 const AllPlants2 = () => {
   const plants = [
-    { name: "Pechay", link: "/plantDetails/Pechay", image: pechay },
-    { name: "Mustasa", link: "", image: mustasa },
-    { name: "Okra", link: "", image: okra },
-    { name: "Talong", link: "", image: talong },
-    { name: "Sili", link: "", image: sili },
-    { name: "Sili", link: "", image: sili },
+    { name: "Pechay", viewLink: "/plantDetails/Pechay", image: pechay },
+    { name: "Mustasa", viewLink: "", image: mustasa },
+    { name: "Okra", viewLink: "", image: okra },
+    { name: "Talong", viewLink: "", image: talong },
+    { name: "Sili", viewLink: "", image: sili },
+    { name: "Sili", viewLink: "", image: sili },
   ];
 
   console.log(plants[0].name.toLowerCase());
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   return (
     <>
       <Grid container spacing={2}>
@@ -64,15 +72,30 @@ const AllPlants2 = () => {
                   </CardActionArea>
                   <CardActions style={{ justifyContent: "center" }}>
                     <ThemeProvider theme={theme}>
-                      <Button
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="outlined primary button group"
                         size="small"
-                        variant="outlined"
-                        color="secondary"
-                        component={Link}
-                        to={item.link}
                       >
-                        View Plant
-                      </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="secondary"
+                          component={Link}
+                          to={item.viewLink}
+                        >
+                          <DescriptionIcon />
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="secondary"
+                          component={Link}
+                          to={item.viewLink}
+                        >
+                          <BorderColorIcon />
+                        </Button>
+                      </ButtonGroup>
                     </ThemeProvider>
                   </CardActions>
                 </Card>
