@@ -144,18 +144,18 @@ const AllPlants2 = () => {
     const db = getDatabase(firebaseDb);
 
     let plantsRef = await ref(db, "/FirebaseRegisteredPlants/" + plantToRemove);
-    // remove(plantsRef).then(() => {
-    //   let updatedPlantList = [];
-    //   updatedPlantList = plants.filter((plant) => {
-    //     return plant.name !== plantToRemove;
-    //   });
+    remove(plantsRef).then(() => {
+      let updatedPlantList = [];
+      updatedPlantList = plants.filter((plant) => {
+        return plant.name !== plantToRemove;
+      });
 
-    // setPlants(updatedPlantList);
-    setAction("successDelete");
-    setShowDeleteModal(true);
-    setShowSuccessAlert(true);
-    setCrudAction("deleted");
-    // });
+      setPlants(updatedPlantList);
+      setAction("successDelete");
+      setShowDeleteModal(true);
+      setShowSuccessAlert(true);
+      setCrudAction("deleted");
+    });
   }
 
   return (
