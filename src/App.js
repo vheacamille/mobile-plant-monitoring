@@ -8,6 +8,7 @@ import LightMeter from "./pages/LightMeter";
 import History from "./pages/History";
 import PlantDetails from "./components/Plant/PlantDetails";
 import AddPlant from "./pages/AddPlant";
+import ModifyPlant from "./components/Plant/ModifyPlant";
 
 function App() {
   return (
@@ -24,9 +25,15 @@ function App() {
             path="/plantDetails/:plantName"
             element={<PlantDetails />}
           />
+          <Route
+            exact
+            path="/modifyPlant/:plantName"
+            element={<ModifyPlant />}
+          />
           <Route exact path="/waterPhLevel" element={<WaterPHLevel />} />
           <Route exact path="/lightMeter" element={<LightMeter />} />
           <Route exact path="/history" element={<History />} />
+          <Route exact path="/addPlant" element={<AddPlant />} />
         </Routes>
       </div>
     </Router>
