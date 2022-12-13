@@ -7,7 +7,7 @@ import WaterPHLevel from "./pages/WaterPHLevel";
 import LightMeter from "./pages/LightMeter";
 import History from "./pages/History";
 import PlantDetails from "./components/Plant/PlantDetails";
-import AddPlant from "./pages/AddPlant";
+import AddPlant from "./components/Plant/AddPlant";
 import ModifyPlant from "./components/Plant/ModifyPlant";
 
 function App() {
