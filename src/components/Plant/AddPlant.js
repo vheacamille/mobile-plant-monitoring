@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -19,8 +20,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, onValue, ref, set } from "firebase/database";
 import firebaseDb from "../Database/firebaseDbConfig";
+import { useEffect } from "react";
+import { ContactsOutlined } from "@mui/icons-material";
 
 const AddPlant = () => {
   const [name, setName] = useState("");
@@ -29,7 +32,27 @@ const AddPlant = () => {
   const [lifeExpectancy, setLifeExpectancy] = useState(0);
   const [hasLifeExpectancyError, setHasLifeExpectancyError] = useState(false);
   const [areSensorsReady, setAreSensorsReady] = useState(false);
-  const [link, setLink] = useState("#");
+  const [plants, setPlants] = useState([]);
+  const [addResult, setAddResult] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  useEffect(() => {
+    const getAllPlants = async () => {
+      const db = getDatabase(firebaseDb);
+      const plantsRef = await ref(db, "/FirebaseRegisteredPlants/");
+      onValue(plantsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          let dbValues = snapshot.val();
+          let plantsInDb = Object.values(dbValues);
+          plantsInDb = plantsInDb.map((plants) => plants.name);
+          setPlants(plantsInDb);
+        }
+      });
+    };
+
+    getAllPlants();
+  }, []);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -56,6 +79,23 @@ const AddPlant = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (plants.includes(name)) {
+      setAddResult("error");
+      setAlertMessage("Plant Name is already used! Consider using a new one.");
+      setShowAlert(true);
+      setName("");
+      setPlantedDate(dayjs(new Date()));
+      setLifeExpectancy(0);
+      setAreSensorsReady(false);
+
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 7000);
+
+      return null;
+    }
+
     const db = getDatabase(firebaseDb);
     const plantRef = await ref(db, "/FirebaseRegisteredPlants/" + name);
 
@@ -94,6 +134,12 @@ const AddPlant = () => {
               </Typography>
 
               <CardContent>
+                {showAlert && (
+                  <>
+                    <Alert severity={addResult}>{alertMessage}</Alert>
+                    <br></br>
+                  </>
+                )}
                 <ThemeProvider theme={theme}>
                   <FormControl>
                     <InputLabel
