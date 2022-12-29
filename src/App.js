@@ -33,7 +33,6 @@ function App() {
           <Route exact path="/waterPhLevel" element={<WaterPHLevel />} />
           <Route exact path="/lightMeter" element={<LightMeter />} />
           <Route exact path="/history" element={<History />} />
-          <Route exact path="/addPlant" element={<AddPlant />} />
         </Routes>
       </div>
     </Router>

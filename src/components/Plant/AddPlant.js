@@ -32,27 +32,24 @@ const AddPlant = () => {
   const [lifeExpectancy, setLifeExpectancy] = useState(0);
   const [hasLifeExpectancyError, setHasLifeExpectancyError] = useState(false);
   const [areSensorsReady, setAreSensorsReady] = useState(false);
-  const [plants, setPlants] = useState([]);
   const [addResult, setAddResult] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-  useEffect(() => {
-    const getAllPlants = async () => {
-      const db = getDatabase(firebaseDb);
-      const plantsRef = await ref(db, "/FirebaseRegisteredPlants/");
-      onValue(plantsRef, (snapshot) => {
-        if (snapshot.exists()) {
-          let dbValues = snapshot.val();
-          let plantsInDb = Object.values(dbValues);
-          plantsInDb = plantsInDb.map((plants) => plants.name);
-          setPlants(plantsInDb);
-        }
-      });
-    };
+  const getAllPlants = async () => {
+    let plantsInDb = [];
+    const db = getDatabase(firebaseDb);
+    const plantsRef = await ref(db, "/FirebaseRegisteredPlants/");
+    onValue(plantsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        let dbValues = snapshot.val();
+        plantsInDb = Object.values(dbValues);
+        plantsInDb = plantsInDb.map((plants) => plants.name);
+      }
+    });
 
-    getAllPlants();
-  }, []);
+    return plantsInDb;
+  };
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -80,21 +77,43 @@ const AddPlant = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (plants.includes(name)) {
+    let plants = [];
+    plants = await getAllPlants();
+
+    let isPlantNameTaken = plants.find((nameInDb) => {
+      return nameInDb.toLowerCase() === name.toLowerCase();
+    });
+
+    if (isPlantNameTaken) {
       setAddResult("error");
       setAlertMessage("Plant Name is already used! Consider using a new one.");
       setShowAlert(true);
-      setName("");
-      setPlantedDate(dayjs(new Date()));
-      setLifeExpectancy(0);
-      setAreSensorsReady(false);
-
+      clearInputFields();
       setTimeout(() => {
         setShowAlert(false);
       }, 7000);
 
       return null;
     }
+
+    let isPastLifeExpectancy = checkIfPastLifeExpectancy(
+      lifeExpectancy,
+      plantedDate.toString()
+    );
+
+    // if (isPastLifeExpectancy) {
+    //   setAddResult("error");
+    //   setAlertMessage(
+    //     "Cannot add plant because it is past its life expectancy."
+    //   );
+    //   setShowAlert(true);
+    //   clearInputFields();
+    //   setTimeout(() => {
+    //     setShowAlert(false);
+    //   }, 7000);
+
+    //   return null;
+    // }
 
     const db = getDatabase(firebaseDb);
     const plantRef = await ref(db, "/FirebaseRegisteredPlants/" + name);
@@ -106,7 +125,32 @@ const AddPlant = () => {
       link: areSensorsReady ? "/plantDetails/" + name : "#",
       isAvailableForMonitoring: areSensorsReady,
     });
+
+    setAddResult("success");
+    setAlertMessage("Successfully added " + name);
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 7000);
+
+    clearInputFields();
   };
+
+  function clearInputFields() {
+    setName("");
+    setPlantedDate(dayjs(new Date()));
+    setLifeExpectancy(0);
+    setAreSensorsReady(false);
+  }
+
+  function checkIfPastLifeExpectancy(lifeExpectancyDate, datePlanted) {
+    let lifeExpectancy = parseFloat(lifeExpectancyDate);
+    let dateToday = new Date();
+    let dateToRemovePlant = new Date(datePlanted);
+    dateToRemovePlant.setMonth(dateToRemovePlant.getMonth() + lifeExpectancy);
+
+    return dateToday >= dateToRemovePlant;
+  }
 
   return (
     <>

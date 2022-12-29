@@ -15,16 +15,27 @@ import {
 import DescriptionIcon from "@mui/icons-material/Description";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link } from "react-router-dom";
 import plant from "./imgs/plant-logo.png";
+import seed from "./imgs/seed.png";
 import { useState, useRef, useEffect } from "react";
-import { getDatabase, ref, onValue, remove } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  remove,
+  set,
+  push,
+} from "firebase/database";
 import firebaseDb from "../Database/firebaseDbConfig";
+import dayjs from "dayjs";
 import DeleteModal from "./DeleteModal";
 
 const AllPlants2 = () => {
   const [plants, setPlants] = useState([]);
   const [plantNamesToRemove, setPlantNamesToRemove] = useState([]);
+  const [archivedPlants, setArchivedPlants] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [crudAction, setCrudAction] = useState("");
@@ -42,23 +53,26 @@ const AllPlants2 = () => {
         if (snapshot.exists()) {
           let dbValues = snapshot.val();
           let plantsInDb = Object.values(dbValues);
-          generatePlantsToRemove(plantsInDb);
+          identifyPlantsToRemoveAndArchive(plantsInDb);
           let updatedPlantList = [];
           updatedPlantList = plantsInDb.filter((plant) => {
             return !plantNamesToRemove.includes(plant.name);
           });
 
+          plants.push("Add Plant");
           setPlants(updatedPlantList);
         }
       });
     };
 
-    function generatePlantsToRemove(plants) {
+    function identifyPlantsToRemoveAndArchive(plants) {
       let plantsToRemove = [];
+      let plantsToArchive = [];
 
       for (const element of plants) {
         if (checkIfPastLifeExpectancy(element)) {
           plantsToRemove.push(element.name);
+          plantsToArchive.push(element);
         }
       }
 
@@ -66,6 +80,7 @@ const AllPlants2 = () => {
         JSON.stringify(plantNamesToRemove) !== JSON.stringify(plantsToRemove)
       ) {
         setPlantNamesToRemove(plantsToRemove);
+        setArchivedPlants(plantsToArchive);
       }
     }
 
@@ -86,8 +101,27 @@ const AllPlants2 = () => {
       }
     };
 
+    const archivePlants = async () => {
+      const db = getDatabase(firebaseDb);
+
+      for (const element of archivedPlants) {
+        let plantRef = await ref(db, "/PlantsArchive/");
+
+        push(plantRef, {
+          name: element.name,
+          datePlanted: element.datePlanted.toString(),
+          lifeExpectancy: element.lifeExpectancy,
+          link: element.link,
+          isAvailableForMonitoring: element.isAvailableForMonitoring,
+          dateAdded: dayjs(new Date()).toString(),
+          reason: "Past life Expectancy",
+        });
+      }
+    };
+
     getAllPlants();
     deletePlants();
+    archivePlants();
   }, [plantNamesToRemove]);
 
   function handleOnClick() {
@@ -313,6 +347,7 @@ const AllPlants2 = () => {
                               color="secondary"
                               component={Link}
                               to={"/modifyPlant/" + item.name}
+                              state={{ plant: item }}
                               disabled={"longpress" === action}
                             >
                               <BorderColorIcon />
@@ -327,6 +362,56 @@ const AllPlants2 = () => {
             </>
           );
         })}
+        {plants.length % 2 === 0 && (
+          <>
+            <Grid item xs={0} sm={1} zeroMinWidth>
+              <Card />
+            </Grid>
+            <Grid item xs={1} sm={3}>
+              <Card />
+            </Grid>
+          </>
+        )}
+        <Grid item xs={5} sm={4} zeroMinWidth>
+          <Card sx={{ maxWidth: 345 }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="140"
+                image={seed}
+                alt="Add Plant"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Add Plant
+                </Typography>
+                <Typography gutterBottom variant="h7" component="div">
+                  Monitor your plants today!
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <CardActions style={{ justifyContent: "center" }}>
+              <ThemeProvider theme={theme}>
+                <ButtonGroup
+                  variant="text"
+                  aria-label="outlined primary button group"
+                  size="small"
+                >
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="secondary"
+                    component={Link}
+                    to={"/addPlant/"}
+                    disabled={"longpress" === action}
+                  >
+                    <AddCircleOutlineIcon />
+                  </Button>
+                </ButtonGroup>
+              </ThemeProvider>
+            </CardActions>
+          </Card>
+        </Grid>
       </Grid>
     </>
   );
