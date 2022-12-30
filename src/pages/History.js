@@ -1,9 +1,9 @@
-
+import PlantHistory from "../components/History/PlantHistory";
 
 const History = () => {
     return (
         <>
-            HISTORY
+            <PlantHistory />
         </>
     )
 }
