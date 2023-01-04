@@ -22,8 +22,6 @@ import { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { getDatabase, onValue, ref, set } from "firebase/database";
 import firebaseDb from "../Database/firebaseDbConfig";
-import { useEffect } from "react";
-import { ContactsOutlined } from "@mui/icons-material";
 
 const AddPlant = () => {
   const [name, setName] = useState("");
@@ -80,6 +78,18 @@ const AddPlant = () => {
     let plants = [];
     plants = await getAllPlants();
 
+    if (name === "" || name === null) {
+      setAddResult("error");
+      setAlertMessage("Invalid Plant Name");
+      setShowAlert(true);
+      clearInputFields();
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 7000);
+
+      return null;
+    }
+
     let isPlantNameTaken = plants.find((nameInDb) => {
       return nameInDb.toLowerCase() === name.toLowerCase();
     });
@@ -101,26 +111,29 @@ const AddPlant = () => {
       plantedDate.toString()
     );
 
-    // if (isPastLifeExpectancy) {
-    //   setAddResult("error");
-    //   setAlertMessage(
-    //     "Cannot add plant because it is past its life expectancy."
-    //   );
-    //   setShowAlert(true);
-    //   clearInputFields();
-    //   setTimeout(() => {
-    //     setShowAlert(false);
-    //   }, 7000);
+    if (isPastLifeExpectancy) {
+      setAddResult("error");
+      setAlertMessage(
+        "Cannot add plant because it is past its life expectancy."
+      );
+      setShowAlert(true);
+      clearInputFields();
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 7000);
 
-    //   return null;
-    // }
+      return null;
+    }
 
     const db = getDatabase(firebaseDb);
     const plantRef = await ref(db, "/FirebaseRegisteredPlants/" + name);
+    let plantedDateTime = plantedDate.toDate();
+
+    plantedDateTime.setUTCHours(plantedDateTime.getUTCHours() + 8);
 
     set(plantRef, {
       name,
-      datePlanted: plantedDate.toString(),
+      datePlanted: plantedDateTime.toUTCString(),
       lifeExpectancy,
       link: areSensorsReady ? "/plantDetails/" + name : "#",
       isAvailableForMonitoring: areSensorsReady,
@@ -212,7 +225,7 @@ const AddPlant = () => {
                       views={["year", "month", "day"]}
                       value={plantedDate}
                       onChange={(newValue) => {
-                        setPlantedDate(newValue);
+                        setPlantedDate(dayjs(newValue));
                       }}
                       renderInput={(params) => <TextField {...params} />}
                     />

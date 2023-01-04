@@ -107,13 +107,16 @@ const AllPlants2 = () => {
       for (const element of archivedPlants) {
         let plantRef = await ref(db, "/PlantsArchive/");
 
+        let dateArchived = new Date();
+        dateArchived.setUTCHours(dateArchived.getUTCHours() + 8);
+
         push(plantRef, {
           name: element.name,
           datePlanted: element.datePlanted.toString(),
           lifeExpectancy: element.lifeExpectancy,
           link: element.link,
           isAvailableForMonitoring: element.isAvailableForMonitoring,
-          dateAdded: dayjs(new Date()).toString(),
+          dateAdded: dateArchived.toUTCString(),
           reason: "Past life Expectancy",
         });
       }
@@ -158,9 +161,14 @@ const AllPlants2 = () => {
   }
 
   function getDaysBetweenDates(dateStart, dateEnd) {
+    dateEnd.setUTCHours(dateEnd.getUTCHours() + 8);
+
     let timeDifference = dateEnd.getTime() - dateStart.getTime();
     let millisecondsInADay = 1000 * 60 * 60 * 24;
-    let daysBetween = Math.floor(timeDifference / millisecondsInADay);
+    let daysBetween =
+      Math.floor(timeDifference / millisecondsInADay) < 0
+        ? 0
+        : Math.floor(timeDifference / millisecondsInADay);
 
     return daysBetween;
   }
@@ -174,14 +182,17 @@ const AllPlants2 = () => {
     }
   }
 
-  async function deletePlant(plantToRemove) {
+  async function deletePlant(plantToRemove, reason, setCloseModal) {
     const db = getDatabase(firebaseDb);
 
-    let plantsRef = await ref(db, "/FirebaseRegisteredPlants/" + plantToRemove);
+    let plantsRef = await ref(
+      db,
+      "/FirebaseRegisteredPlants/" + plantToRemove.name
+    );
     remove(plantsRef).then(() => {
       let updatedPlantList = [];
       updatedPlantList = plants.filter((plant) => {
-        return plant.name !== plantToRemove;
+        return plant.name !== plantToRemove.name;
       });
 
       setPlants(updatedPlantList);
@@ -189,6 +200,27 @@ const AllPlants2 = () => {
       setShowDeleteModal(true);
       setShowSuccessAlert(true);
       setCrudAction("deleted");
+
+      archivePlant(plantToRemove, reason);
+      handleClose("delete");
+    });
+  }
+
+  async function archivePlant(plantToRemove, reason) {
+    const db = getDatabase(firebaseDb);
+    let plantRef = await ref(db, "/PlantsArchive/");
+
+    let dateArchived = new Date();
+    dateArchived.setUTCHours(dateArchived.getUTCHours() + 8);
+
+    push(plantRef, {
+      name: plantToRemove.name,
+      datePlanted: plantToRemove.datePlanted.toString(),
+      lifeExpectancy: plantToRemove.lifeExpectancy,
+      link: plantToRemove.link,
+      isAvailableForMonitoring: plantToRemove.isAvailableForMonitoring,
+      dateAdded: dateArchived.toUTCString(),
+      reason,
     });
   }
 
@@ -292,7 +324,7 @@ const AllPlants2 = () => {
 
                           {showDeleteModal && (
                             <DeleteModal
-                              plantName={item.name}
+                              plant={item}
                               isOpen={showDeleteModal}
                               closeModal={handleClose}
                               deletePlant={deletePlant}

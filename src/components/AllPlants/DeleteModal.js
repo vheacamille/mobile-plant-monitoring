@@ -9,7 +9,7 @@ import {
 import { Box } from "@mui/system";
 import { useState } from "react";
 
-const DeleteModal = ({ plantName, isOpen, closeModal, deletePlant }) => {
+const DeleteModal = ({ plant, isOpen, closeModal, deletePlant }) => {
   const [confirmedDelete, setConfirmedDelete] = useState(false);
 
   const style = {
@@ -37,8 +37,8 @@ const DeleteModal = ({ plantName, isOpen, closeModal, deletePlant }) => {
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {!confirmedDelete
-              ? "Remove " + plantName + "?"
-              : "Successfully deleted " + plantName}
+              ? "Remove " + plant.name + "?"
+              : "Successfully deleted " + plant.name}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <ThemeProvider theme={theme}>
@@ -49,14 +49,43 @@ const DeleteModal = ({ plantName, isOpen, closeModal, deletePlant }) => {
                     variant="outlined"
                     color="secondary"
                     onClick={() => {
-                      deletePlant(plantName);
+                      deletePlant(plant, "Wrong plant details");
                       setConfirmedDelete(true);
                       isOpen = true;
                     }}
                   >
-                    Yes
+                    Yes. I entered the wrong plant details.
                   </Button>
-                  &nbsp;&nbsp;&nbsp;
+                  <br></br>
+                  <br></br>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => {
+                      deletePlant(plant, "Dead plant");
+                      setConfirmedDelete(true);
+                      isOpen = true;
+                    }}
+                  >
+                    Yes. The plant died.
+                  </Button>
+                  <br></br>
+                  <br></br>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => {
+                      deletePlant(plant, "Other reasons");
+                      setConfirmedDelete(true);
+                      isOpen = true;
+                    }}
+                  >
+                    Yes. Delete plant for other reasons.
+                  </Button>
+                  <br></br>
+                  <br></br>
                   <Button
                     size="small"
                     variant="outlined"
