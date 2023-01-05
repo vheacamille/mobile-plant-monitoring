@@ -203,6 +203,7 @@ const AllPlants2 = () => {
 
       archivePlant(plantToRemove, reason);
       handleClose("delete");
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     });
   }
 
