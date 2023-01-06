@@ -96,21 +96,21 @@ const PlantDetails = () => {
       </div>
       {!open && (
         <Grid container spacing={2}>
-          <Grid item xs={10} sm={5}>
+          <Grid item xs={10} sm={5} xl={5}>
             <Card />
           </Grid>
-          <Grid item xs={10} sm={3}>
+          <Grid item xs={10} sm={3} xl={4}>
             <Typography gutterBottom variant="h6" component="div">
               {plantName} Details
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={4} xl={3}>
             <Card />
           </Grid>
-          <Grid item xs={2} sm={3}>
+          <Grid item xs={2} sm={3} xl={4}>
             <Card />
           </Grid>
-          <Grid item xs={4} sm={4} zeroMinWidth>
+          <Grid item xs={4} sm={4} xl={3} zeroMinWidth>
             <div
               key={humidity}
               style={{
@@ -148,7 +148,7 @@ const PlantDetails = () => {
               </CardActionArea>
             </Card>
           </Grid>
-          <Grid item xs={5} sm={4} zeroMinWidth>
+          <Grid item xs={5} sm={4} xl={2} zeroMinWidth>
             <div
               key={temperature}
               style={{
@@ -185,13 +185,13 @@ const PlantDetails = () => {
               </CardActionArea>
             </Card>
           </Grid>
-          <Grid item xs={3} sm={4}>
+          <Grid item xs={3} sm={4} xl={4}>
             <Card />
           </Grid>
-          <Grid item xs={1} sm={0}>
+          <Grid item xs={1} sm={0} xl={1}>
             <Card />
           </Grid>
-          <Grid item xs={4} sm={3} zeroMinWidth>
+          <Grid item xs={4} sm={3} xl={3} zeroMinWidth>
             <div
               key={moisture}
               style={{
@@ -228,10 +228,10 @@ const PlantDetails = () => {
               </CardActionArea>
             </Card>
           </Grid>
-          <Grid item xs={4} sm={1}>
+          <Grid item xs={4} sm={1} xl={4}>
             <Card />
           </Grid>
-          <Grid item xs={4} sm={4}>
+          <Grid item xs={4} sm={4} xl={4}>
             <Card />
           </Grid>
         </Grid>
