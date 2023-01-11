@@ -13,7 +13,10 @@ const WaterPHLevel = () => {
     setWaterLevel("0");
     const getWaterLevel = async () => {
       const db = getDatabase(firebaseDb);
-      const waterLevelRef = await ref(db, "/FirebaseIOT/humidity");
+      const waterLevelRef = await ref(
+        db,
+        "/FirebaseRegisteredPlants/Pechay/phValue"
+      );
       onValue(waterLevelRef, (snapshot) => {
         if (snapshot.exists()) {
           setWaterLevel(parseFloat(JSON.stringify(snapshot.val())));
