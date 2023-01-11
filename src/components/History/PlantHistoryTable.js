@@ -28,8 +28,8 @@ const PlantHistoryTable = ({ historyList }) => {
         rows={historyList}
         columns={columns}
         getRowId={(row) => row.name}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
       />
     </div>
   );

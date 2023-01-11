@@ -16,7 +16,6 @@ const PlantHistory = () => {
         if (snapshot.exists()) {
           let dbData = snapshot.val();
           let historyListDB = Object.values(dbData);
-          console.log(historyListDB);
 
           // Filter History to only return data from 3 Months ago to Present
           historyListDB = historyListDB.filter(data => {
