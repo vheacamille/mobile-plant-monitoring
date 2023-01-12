@@ -8,7 +8,6 @@ const WaterPHLevel = () => {
   const [waterLevel, setWaterLevel] = useState("0");
   const [timeUpdated, setTimeUpdated] = useState(getCurrentDateAndTime());
 
-  //VCV TEST CODE ONLY
   useEffect(() => {
     setWaterLevel("0");
     const getWaterLevel = async () => {

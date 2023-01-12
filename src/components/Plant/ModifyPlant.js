@@ -70,7 +70,7 @@ const ModifyPlant = ({ plant }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-   
+
     let isPastLifeExpectancy = checkIfPastLifeExpectancy(
       lifeExpectancy,
       plantedDate.toString()
@@ -78,11 +78,9 @@ const ModifyPlant = ({ plant }) => {
 
     if (isPastLifeExpectancy) {
       setModifyResult("error");
-      setAlertMessage(
-        "Cannot add plant because it is past its life expectancy."
-      );
+      setAlertMessage("Invalid life expectancy value.");
       setShowAlert(true);
-      clearInputFields();
+      revertInputFields();
       setTimeout(() => {
         setShowAlert(false);
       }, 7000);
@@ -102,20 +100,17 @@ const ModifyPlant = ({ plant }) => {
     });
 
     setModifyResult("success");
-    setAlertMessage("Successfully added " + name);
+    setAlertMessage("Successfully modified " + name);
     setShowAlert(true);
     setTimeout(() => {
       setShowAlert(false);
     }, 7000);
-
-    clearInputFields();
   };
 
-  function clearInputFields() {
-    setName("");
-    setPlantedDate(dayjs(new Date()));
-    setLifeExpectancy(0);
-    setAreSensorsReady(false);
+  function revertInputFields() {
+    setPlantedDate(plantData.datePlanted);
+    setLifeExpectancy(plantData.lifeExpectancy);
+    setAreSensorsReady(plantData.isAvailableForMonitoring);
   }
 
   function checkIfPastLifeExpectancy(lifeExpectancyDate, datePlanted) {
@@ -233,7 +228,7 @@ const ModifyPlant = ({ plant }) => {
                     type="submit"
                     onClick={handleSubmit}
                   >
-                    Add
+                    Modify
                   </Button>
                 </ThemeProvider>
               </CardContent>

@@ -8,12 +8,14 @@ const LightMeter = () => {
   const [lightMeter, setLightMeter] = useState("0");
   const [timeUpdated, setTimeUpdated] = useState(getCurrentDateAndTime());
 
-  // VCV: TEST ONLY. Replace with correct firebase
   useEffect(() => {
     setLightMeter("0");
     const getLightMeter = async () => {
       const db = getDatabase(firebaseDb);
-      const lightMeterRef = await ref(db, "/FirebaseIOT/light");
+      const lightMeterRef = await ref(
+        db,
+        "/FirebaseRegisteredPlants/Pechay/light"
+      );
       onValue(lightMeterRef, (snapshot) => {
         if (snapshot.exists()) {
           setLightMeter(parseFloat(JSON.stringify(snapshot.val())));
