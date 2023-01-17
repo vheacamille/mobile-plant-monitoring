@@ -15,15 +15,12 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { getDatabase, onValue, ref, set } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 import firebaseDb from "../Database/firebaseDbConfig";
-import { useEffect } from "react";
-import { ContactsOutlined } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 
 const ModifyPlant = ({ plant }) => {

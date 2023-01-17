@@ -25,11 +25,9 @@ import {
   ref,
   onValue,
   remove,
-  set,
   push,
 } from "firebase/database";
 import firebaseDb from "../Database/firebaseDbConfig";
-import dayjs from "dayjs";
 import DeleteModal from "./DeleteModal";
 
 const AllPlants2 = () => {
@@ -117,7 +115,7 @@ const AllPlants2 = () => {
           link: element.link,
           isAvailableForMonitoring: element.isAvailableForMonitoring,
           dateAdded: dateArchived.toUTCString(),
-          reason: "Past life Expectancy",
+          reason: "Past life expectancy",
         });
       }
     };
@@ -370,7 +368,9 @@ const AllPlants2 = () => {
                               color="secondary"
                               component={Link}
                               to={item.link}
-                              disabled={"longpress" === action}
+                              disabled={
+                                "longpress" === action || item.link === "#"
+                              }
                             >
                               <DescriptionIcon />
                             </Button>

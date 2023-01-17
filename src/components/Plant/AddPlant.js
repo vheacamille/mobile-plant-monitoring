@@ -255,6 +255,7 @@ const AddPlant = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
+                        disabled
                         checked={areSensorsReady}
                         onChange={handleSensorsReadyChange}
                       />
