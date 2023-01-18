@@ -23,7 +23,14 @@ const PlantHistory = () => {
             let date3MonthsAgo = new Date();
             date3MonthsAgo.setMonth(date3MonthsAgo.getMonth() - 3);
 
-            return archiveDate >= date3MonthsAgo
+            return archiveDate >= date3MonthsAgo;
+          });
+
+          // Sort History from latest to earliest
+          historyListDB = historyListDB.sort((plant1, plant2) => {
+            let date1 = new Date(plant1.dateAdded);
+            let date2 = new Date(plant2.dateAdded);
+            return date2 - date1;
           });
 
           setHistoryList(historyListDB);
@@ -36,7 +43,7 @@ const PlantHistory = () => {
 
   return (
     <div>
-      <Grid container spacing={2} sx={{padding:"20px"}}>
+      <Grid container spacing={2} sx={{ padding: "20px" }}>
         <Grid item xl={2} lg={3} md={3} sm={4} zeroMinWidth>
 
         </Grid>
