@@ -174,6 +174,9 @@ const ModifyPlant = ({ plant }) => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       disableFuture
+                      shouldDisableYear={(year) => {
+                        return year.$y < 2022;
+                      }}
                       label="Date Planted"
                       openTo="year"
                       views={["year", "month", "day"]}

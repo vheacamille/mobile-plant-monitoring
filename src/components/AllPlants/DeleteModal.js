@@ -62,12 +62,12 @@ const DeleteModal = ({ plant, isOpen, closeModal, deletePlant }) => {
                     variant="outlined"
                     color="secondary"
                     onClick={() => {
-                      deletePlant(plant, "Dead plant");
+                      deletePlant(plant, "Infected or damaged by insects");
                       setConfirmedDelete(true);
                       isOpen = true;
                     }}
                   >
-                    Yes. The plant died.
+                    Yes. The plant is infected or damaged by insects.
                   </Button>
                   <br></br>
                   <br></br>
