@@ -11,14 +11,6 @@ const PlantHistoryTable = ({ historyList }) => {
     { field: "reason", headerName: "Reason", width: 350 },
   ];
 
-  function customNoRowsOverlay() {
-    return (
-      <GridOverlay>
-        <div>No Data Retrieved</div>
-      </GridOverlay>
-    );
-  }
-
   return (
     <div style={{ height: 500, width: "100%" }}>
       <DataGrid
@@ -27,7 +19,7 @@ const PlantHistoryTable = ({ historyList }) => {
         }}
         rows={historyList}
         columns={columns}
-        getRowId={(row) => row.name}
+        getRowId={(row) => row.dateAdded}
         pageSize={10}
         rowsPerPageOptions={[10]}
       />
