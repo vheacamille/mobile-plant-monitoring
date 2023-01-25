@@ -31,10 +31,9 @@ const ModifyPlant = ({ plant }) => {
   const [name, setName] = useState(plantData.name);
   const [hasNameError, setHasNameError] = useState(false);
   const [plantedDate, setPlantedDate] = useState(plantData.datePlanted);
-  const [lifeExpectancy, setLifeExpectancy] = useState(
-    plantData.lifeExpectancy
+  const [expectedHarvestDate, setExpectedHarvestDate] = useState(
+    plantData.expectedHarvestDate
   );
-  const [hasLifeExpectancyError, setHasLifeExpectancyError] = useState(false);
   const [areSensorsReady, setAreSensorsReady] = useState(
     plantData.isAvailableForMonitoring
   );
@@ -51,16 +50,6 @@ const ModifyPlant = ({ plant }) => {
     }
   };
 
-  const handleLifeExpectancyChange = (event) => {
-    setLifeExpectancy(event.target.value);
-
-    if (!isNaN(parseFloat(event.target.value))) {
-      setHasLifeExpectancyError(false);
-    } else {
-      setHasLifeExpectancyError(true);
-    }
-  };
-
   const handleSensorsReadyChange = (event) => {
     setAreSensorsReady(event.target.checked);
   };
@@ -68,14 +57,11 @@ const ModifyPlant = ({ plant }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let isPastLifeExpectancy = checkIfPastLifeExpectancy(
-      lifeExpectancy,
-      plantedDate.toString()
-    );
+    let isPastHarvestDate = checkIfPastExpectedHarvestDate(expectedHarvestDate);
 
-    if (isPastLifeExpectancy) {
+    if (isPastHarvestDate) {
       setModifyResult("error");
-      setAlertMessage("Invalid life expectancy value.");
+      setAlertMessage("Invalid expected harvest date value.");
       setShowAlert(true);
       revertInputFields();
       setTimeout(() => {
@@ -88,10 +74,18 @@ const ModifyPlant = ({ plant }) => {
     const db = getDatabase(firebaseDb);
     const plantRef = await ref(db, "/FirebaseRegisteredPlants/" + name);
 
+    let plantedDateTime = new Date(plantedDate);
+    plantedDateTime.setUTCHours(plantedDateTime.getUTCHours() + 8);
+
+    let expectedHarvestDateTime = new Date(expectedHarvestDate);
+    expectedHarvestDateTime.setUTCHours(
+      expectedHarvestDateTime.getUTCHours() + 8
+    );
+
     set(plantRef, {
       name,
-      datePlanted: plantedDate.toString(),
-      lifeExpectancy,
+      datePlanted: plantedDateTime.toUTCString(),
+      expectedHarvestDate: expectedHarvestDateTime.toUTCString(),
       link: areSensorsReady ? "/plantDetails/" + name : "#",
       isAvailableForMonitoring: areSensorsReady,
     });
@@ -106,17 +100,18 @@ const ModifyPlant = ({ plant }) => {
 
   function revertInputFields() {
     setPlantedDate(plantData.datePlanted);
-    setLifeExpectancy(plantData.lifeExpectancy);
+    setExpectedHarvestDate(plantData.expectedHarvestDate);
     setAreSensorsReady(plantData.isAvailableForMonitoring);
   }
 
-  function checkIfPastLifeExpectancy(lifeExpectancyDate, datePlanted) {
-    let lifeExpectancy = parseFloat(lifeExpectancyDate);
+  function checkIfPastExpectedHarvestDate(expectedHarvestDate) {
     let dateToday = new Date();
-    let dateToRemovePlant = new Date(datePlanted);
-    dateToRemovePlant.setMonth(dateToRemovePlant.getMonth() + lifeExpectancy);
+    let dateToRemovePlant = new Date(expectedHarvestDate);
 
-    return dateToday >= dateToRemovePlant;
+    return (
+      dateToday.getFullYear() === dateToRemovePlant.getFullYear() &&
+      dateToday.getMonth() === dateToRemovePlant.getMonth()
+    );
   }
 
   return (
@@ -189,24 +184,21 @@ const ModifyPlant = ({ plant }) => {
                   </LocalizationProvider>
                   <br></br>
                   <br></br>
-                  <FormControl>
-                    <InputLabel
-                      required
-                      error={hasLifeExpectancyError}
-                      htmlFor="component-outlined"
-                    >
-                      Life Expectancy (Months)
-                    </InputLabel>
-                    <OutlinedInput
-                      required
-                      error={hasLifeExpectancyError}
-                      id="component-outlined"
-                      value={lifeExpectancy}
-                      onChange={handleLifeExpectancyChange}
-                      label="Life Expectancy (Months)"
-                      type="number"
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      shouldDisableYear={(year) => {
+                        return year.$y < 2022 || year.$y > 2023;
+                      }}
+                      label="Expected Harvest Date"
+                      openTo="year"
+                      views={["year", "month"]}
+                      value={expectedHarvestDate}
+                      onChange={(newValue) => {
+                        setExpectedHarvestDate(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
                     />
-                  </FormControl>
+                  </LocalizationProvider>
                   <br></br>
                   <br></br>
                   <FormControlLabel
