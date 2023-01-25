@@ -106,11 +106,11 @@ const AllPlants2 = () => {
         push(plantRef, {
           name: element.name,
           datePlanted: element.datePlanted.toString(),
-          lifeExpectancy: element.lifeExpectancy,
+          expectedHarvestDate: element.expectedHarvestDate.toString(),
           link: element.link,
           isAvailableForMonitoring: element.isAvailableForMonitoring,
           dateAdded: dateArchived.toUTCString(),
-          reason: "Past life expectancy",
+          reason: "Past expected harvest date",
         });
       }
     };
@@ -210,7 +210,7 @@ const AllPlants2 = () => {
     push(plantRef, {
       name: plantToRemove.name,
       datePlanted: plantToRemove.datePlanted.toString(),
-      lifeExpectancy: plantToRemove.lifeExpectancy,
+      expectedHarvestDate: plantToRemove.expectedHarvestDate.toString(),
       link: plantToRemove.link,
       isAvailableForMonitoring: plantToRemove.isAvailableForMonitoring,
       dateAdded: dateArchived.toUTCString(),

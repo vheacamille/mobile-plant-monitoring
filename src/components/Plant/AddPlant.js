@@ -127,10 +127,7 @@ const AddPlant = () => {
     set(plantRef, {
       name,
       datePlanted: plantedDateTime.toUTCString(),
-      expectedHarvestDate:
-        expectedHarvestDateTime.getMonth() +
-        "-" +
-        expectedHarvestDateTime.getFullYear(),
+      expectedHarvestDate: expectedHarvestDateTime.toUTCString(),
       link: areSensorsReady ? "/plantDetails/" + name : "#",
       isAvailableForMonitoring: areSensorsReady,
     });

@@ -74,10 +74,10 @@ const ModifyPlant = ({ plant }) => {
     const db = getDatabase(firebaseDb);
     const plantRef = await ref(db, "/FirebaseRegisteredPlants/" + name);
 
-    let plantedDateTime = plantedDate.toDate();
+    let plantedDateTime = new Date(plantedDate);
     plantedDateTime.setUTCHours(plantedDateTime.getUTCHours() + 8);
 
-    let expectedHarvestDateTime = expectedHarvestDate.toDate();
+    let expectedHarvestDateTime = new Date(expectedHarvestDate);
     expectedHarvestDateTime.setUTCHours(
       expectedHarvestDateTime.getUTCHours() + 8
     );
@@ -85,10 +85,7 @@ const ModifyPlant = ({ plant }) => {
     set(plantRef, {
       name,
       datePlanted: plantedDateTime.toUTCString(),
-      expectedHarvestDate:
-        expectedHarvestDateTime.getMonth() +
-        "-" +
-        expectedHarvestDateTime.getFullYear(),
+      expectedHarvestDate: expectedHarvestDateTime.toUTCString(),
       link: areSensorsReady ? "/plantDetails/" + name : "#",
       isAvailableForMonitoring: areSensorsReady,
     });
