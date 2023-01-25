@@ -17,16 +17,10 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link } from "react-router-dom";
-import plant from "./imgs/plant-logo.png";
+import plant from "./imgs/real-display-plant.png";
 import seed from "./imgs/seed.png";
 import { useState, useRef, useEffect } from "react";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  remove,
-  push,
-} from "firebase/database";
+import { getDatabase, ref, onValue, remove, push } from "firebase/database";
 import firebaseDb from "../Database/firebaseDbConfig";
 import DeleteModal from "./DeleteModal";
 
@@ -68,7 +62,7 @@ const AllPlants2 = () => {
       let plantsToArchive = [];
 
       for (const element of plants) {
-        if (checkIfPastLifeExpectancy(element)) {
+        if (checkIfPastExpectedHarvestDate(element.expectedHarvestDate)) {
           plantsToRemove.push(element.name);
           plantsToArchive.push(element);
         }
@@ -82,13 +76,14 @@ const AllPlants2 = () => {
       }
     }
 
-    function checkIfPastLifeExpectancy(plant) {
-      let lifeExpectancy = parseFloat(plant.lifeExpectancy);
+    function checkIfPastExpectedHarvestDate(expectedHarvestDate) {
       let dateToday = new Date();
-      let dateToRemovePlant = new Date(plant.datePlanted);
-      dateToRemovePlant.setMonth(dateToRemovePlant.getMonth() + lifeExpectancy);
+      let dateToRemovePlant = new Date(expectedHarvestDate);
 
-      return dateToday >= dateToRemovePlant;
+      return (
+        dateToday.getFullYear() === dateToRemovePlant.getFullYear() &&
+        dateToday.getMonth() === dateToRemovePlant.getMonth()
+      );
     }
 
     const deletePlants = async () => {
