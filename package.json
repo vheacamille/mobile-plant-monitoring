@@ -19,6 +19,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-liquidchart": "^0.3.0",
+    "react-material-ui-carousel": "^3.4.2",
     "react-native-sensor": "^1.0.3",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",

@@ -1,18 +1,101 @@
-.home {
-  background-image: url('../images/GardenBG.jpg');
-  background-size: 100% 100% cover;
-  background-repeat: no-repeat;
-  object-position: 50%;
-  width: 100%;
-  height: 2008px;
-  border: 2px solid;
-  position: left;
-  color: pink;
-}
-
 .home>h1 {
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
   color: white;
-  text-shadow: 7px 7px 7px black;
-  font-size: 50px;
+  font-weight: bold;
+  border: 3px solid #f1f1f1;
+  position: absolute;
+  top:7%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
 }
 
+.garden-carousel {
+  width: 100%;
+  height: 70vh;
+  object-fit: cover;
+  object-position: 50%;
+}
+
+
+/* Mobile Devices */
+@media only screen and (min-width: 320px) {
+  .home>h1 {
+    top:12%;
+  }
+}
+
+/* Mobile Devices */
+@media only screen and (min-width: 390px) {
+  .home>h1 {
+    top:9.2%;
+  }
+}
+
+/* Mobile Devices */
+@media only screen and (min-width: 410px) {
+  .home>h1 {
+    top:9%;
+  }
+}
+
+/* Ipads, Tablets */
+@media only screen and (min-width: 481px) {
+  .home>h1 {
+    top:6%;
+  }
+}
+
+/* Ipads, Tablets */
+@media only screen and (min-width: 540px) {
+  .home>h1 {
+    top:11%;
+  }
+}
+
+/* Small screens, laptops */
+@media only screen and (min-width: 768px) {
+  .home>h1 {
+    top:7%;
+  }
+}
+
+/* Small screens, laptops */
+@media only screen and (min-width: 820px) {
+  .home>h1 {
+    top:6%;
+  }
+}
+
+/* Small screens, laptops */
+@media only screen and (min-width: 910px) {
+  .home>h1 {
+    top:5%;
+  }
+}
+ 
+/* Desktops, large screens */
+@media only screen and (min-width: 1024px) {
+  .home>h1 {
+    top:12%;
+  }
+}
+ 
+/* Extra large screens, tv */
+@media only screen and (min-width: 1200px) {
+  .home>h1 {
+    top:9%;
+  }
+}
+
+/* Extra large screens, tv */
+@media only screen and (min-width: 1920px) {
+  .home>h1 {
+    top:7.5%;
+    padding: 10px;
+  }
+}
