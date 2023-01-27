@@ -1,25 +1,26 @@
-import * as React from "react";
-import PropTypes from "prop-types";
+import HomeIcon from "@mui/icons-material/Home";
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import MenuIcon from "@mui/icons-material/Menu";
+import OpacityIcon from "@mui/icons-material/Opacity";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import { createTheme, ThemeProvider } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import HomeIcon from "@mui/icons-material/Home";
-import * as GiIcons from "react-icons/gi";
-import OpacityIcon from "@mui/icons-material/Opacity";
-import LightbulbIcon from "@mui/icons-material/Lightbulb";
-import TimelineIcon from "@mui/icons-material/Timeline";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material";
+import PropTypes from "prop-types";
+import * as React from "react";
+import * as GiIcons from "react-icons/gi";
 import { Link } from "react-router-dom";
 import binhiIcon from "./imgs/binhi-icon-sprout.png";
 
@@ -84,7 +85,7 @@ function ResponsiveDrawerComp(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex"}}>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -103,10 +104,11 @@ function ResponsiveDrawerComp(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: "left"}}>
               <img alt="Binhi Icon" src={binhiIcon} />
               BINHI
             </Typography>
+            <Button color="inherit">Logout</Button>
           </Toolbar>
         </AppBar>
         <Box

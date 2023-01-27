@@ -5,14 +5,12 @@ import GardenCarousel from './GardenCarousel';
 
 const HomePage = () => {
   return (
-    <Grid container spacing={2} sx={{ padding: "10px" }}>
-      <Grid item xl={2} lg={3} md={3} sm={4} zeroMinWidth>
-
+    <Grid container spacing={1} sx={{ padding: "10px" }}>
+      <Grid item xl={2} lg={3} md={3} sm={4}>
       </Grid>
       <Grid item xl={10} lg={9} md={9} sm={8} zeroMinWidth sx={{ width: "100%" }}>
         <div>
           <div className="home">
-            <h1>Welcome to Binhi!</h1>
             <GardenCarousel />
           </div>
         </div>
