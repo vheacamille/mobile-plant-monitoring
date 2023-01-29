@@ -9,13 +9,15 @@ import History from "./pages/History";
 import PlantDetails from "./components/Plant/PlantDetails";
 import AddPlant from "./components/Plant/AddPlant";
 import ModifyPlant from "./components/Plant/ModifyPlant";
+import SignUp from "./components/User/SignUp";
+import Header from "./components/User/Header";
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <ResponsiveDrawerComp></ResponsiveDrawerComp>
-
+        {/* <ResponsiveDrawerComp></ResponsiveDrawerComp> */}
+        <Header></Header>
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/addPlant" element={<AddPlant />} />
@@ -33,6 +35,7 @@ function App() {
           <Route exact path="/waterPhLevel" element={<WaterPHLevel />} />
           <Route exact path="/lightMeter" element={<LightMeter />} />
           <Route exact path="/history" element={<History />} />
+          <Route exact path="/signUp" element={<SignUp />} />
         </Routes>
       </div>
     </Router>
