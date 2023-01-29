@@ -13,35 +13,21 @@ const Header = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
-          <AppBar
-            position="fixed"
-            sx={{
-              width: { sm: "100%" },
-              ml: { sm: "100px" },
-            }}
-          >
-            <Toolbar>
-              <Typography variant="h6" noWrap component="div">
-                <img alt="Binhi Icon" src={binhiIcon} />
-                BINHI
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              p: 3,
-              width: { sm: "100%" },
-            }}
-          >
-            <Toolbar />
-            <Typography paragraph></Typography>
-            <Typography paragraph></Typography>
-          </Box>
-        </Box>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          sx={{
+            width: { sm: "100%" },
+            ml: { sm: "100px" },
+          }}
+        >
+          <Toolbar>
+            <Typography variant="h6" noWrap component="div">
+              <img alt="Binhi Icon" src={binhiIcon} />
+              BINHI
+            </Typography>
+          </Toolbar>
+        </AppBar>
       </ThemeProvider>
     </>
   );

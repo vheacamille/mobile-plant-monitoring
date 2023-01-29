@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { DataGrid, GridOverlay } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
 
 const PlantHistoryTable = ({ historyList }) => {
@@ -9,6 +9,7 @@ const PlantHistoryTable = ({ historyList }) => {
     { field: "datePlanted", headerName: "Date Planted", width: 250 },
     { field: "dateAdded", headerName: "Date Deleted", width: 250 },
     { field: "reason", headerName: "Reason", width: 350 },
+    { field: "deletedBy", headerName: "Removed By", width: 300 },
   ];
 
   return (
