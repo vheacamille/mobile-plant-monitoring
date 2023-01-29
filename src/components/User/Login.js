@@ -1,5 +1,6 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -10,10 +11,14 @@ import {
   Paper,
   TextField,
   ThemeProvider,
-  Typography
+  Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { getDatabase, onValue, ref } from "firebase/database";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
+import firebaseDb from "../Database/firebaseDbConfig";
+import bcrypt from "bcryptjs";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -28,56 +33,112 @@ const theme = createTheme({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [usersInDB, setUsersInDB] = useState(null);
+
   // Form validation states
-  const [emailError, setEmailError] = useState(null);
-  const [emailErrorText, setEmailErrorText] = useState("");
+  const [userIDError, setUserIDError] = useState(null);
+  const [userIDErrorText, setUserIDErrorText] = useState("");
   const [passwordError, setPasswordError] = useState(null);
   const [passwordErrorText, setPasswordErrorText] = useState("");
+  const [signUpResult, setSignUpResult] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
+  useEffect(() => {
+    if (sessionStorage.getItem("refreshLogin") === "true") {
+      window.location.reload(true);
+      sessionStorage.removeItem("refreshLogin");
+    }
 
-  const handleSubmit = (event) => {
+    if (usersInDB === null) {
+      getAllUsers();
+    }
+  });
+
+  const getAllUsers = async () => {
+    let users = [];
+    const db = getDatabase(firebaseDb);
+    const usersRef = await ref(db, "/FirebaseRegisteredUsers/");
+    onValue(usersRef, (snapshot) => {
+      if (snapshot.exists()) {
+        users = snapshot.val();
+        setUsersInDB(users);
+      }
+    });
+    return users;
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
 
+    const data = new FormData(event.currentTarget);
+    const userInDB = usersInDB[data.get("userID")];
     validateForm(data);
 
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    if (userInDB === null) {
+      setSignUpResult("error");
+      setAlertMessage("Invalid User ID or Password");
+      setShowAlert(true);
+
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 7000);
+    }
+
+    const salt = userInDB.salt;
+    const hashedPassword = bcrypt.hashSync(data.get("password"), salt);
+    console.log("hash pass ", hashedPassword);
+    console.log("passs ", userInDB.password);
+    if (hashedPassword !== userInDB.password) {
+      setSignUpResult("error");
+      setAlertMessage("Invalid User ID or Password");
+      setShowAlert(true);
+
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 7000);
+    }
+
+    setUserIDError(false);
+    setUserIDErrorText("");
+    setPasswordError(false);
+    setPasswordErrorText("");
+
+    sessionStorage.setItem("userID", data.get("userID"));
+    sessionStorage.setItem("refreshHomePage", "true");
+    navigate("/home");
   };
 
   function validateForm(data) {
-    // Validate Email
-    const email = data.get("email");
-    if (!isValidEmail(email))
-      setEmailError(true);
+    // Validate User ID
+    const formUserID = data.get("userID");
+    if (!isValidUserID(formUserID)) setUserIDError(true);
     else {
-      setEmailError(false);
-      setEmailErrorText("");
+      setUserIDError(false);
+      setUserIDErrorText("");
     }
 
     // Validate Password
     const password = data.get("password");
-    if(!isValidPassword(password))
-      setPasswordError(true);
+
+    if (!isValidPassword(password)) setPasswordError(true);
     else {
       setPasswordError(false);
       setPasswordErrorText("");
     }
   }
 
-  function isValidEmail(email) {
-    if (email === null || email === "") {
-      setEmailErrorText("Required!");
+  function isValidUserID(userID) {
+    if (userID === null || userID === "") {
+      setUserIDErrorText("Required!");
       return false;
     }
 
-    const emailRegex =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    const userIDRegex = /^[a-z0-9]+$/i;
 
-    if (!emailRegex.test(email)) {
-      setEmailErrorText("Invalid email address!");
+    if (!userIDRegex.test(userID)) {
+      setUserIDErrorText("Invalid User ID!");
       return false;
     }
 
@@ -85,8 +146,8 @@ const Login = () => {
   }
 
   function isValidPassword(password) {
-    if(password.length < 8){
-      setPasswordErrorText("Password must be atleast 8 characters");
+    if (password.length < 8) {
+      setPasswordErrorText("Invalid Password!");
       return false;
     }
 
@@ -131,6 +192,12 @@ const Login = () => {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            {showAlert && (
+              <>
+                <Alert severity={signUpResult}>{alertMessage}</Alert>
+                <br></br>
+              </>
+            )}
             <Box
               component="form"
               noValidate
@@ -141,13 +208,13 @@ const Login = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="userID"
+                label="User ID"
+                name="userID"
+                autoComplete="userID"
                 autoFocus
-                error={emailError}
-                helperText={emailErrorText}
+                error={userIDError}
+                helperText={userIDErrorText}
               />
               <TextField
                 margin="normal"

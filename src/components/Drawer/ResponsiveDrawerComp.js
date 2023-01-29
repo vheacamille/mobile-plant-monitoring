@@ -6,7 +6,7 @@ import TimelineIcon from "@mui/icons-material/Timeline";
 import { createTheme, ThemeProvider } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -21,12 +21,13 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import * as React from "react";
 import * as GiIcons from "react-icons/gi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import binhiIcon from "./imgs/binhi-icon-sprout.png";
 
 const drawerWidth = 240;
 
 function ResponsiveDrawerComp(props) {
+  const navigate = useNavigate();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [tabIndex, setTabIndex] = React.useState(-1);
@@ -40,7 +41,7 @@ function ResponsiveDrawerComp(props) {
   };
 
   const listIcons = {
-    Home: { index: 0, icon: <HomeIcon />, link: "/" },
+    Home: { index: 0, icon: <HomeIcon />, link: "/home" },
     Plants: { index: 1, icon: <GiIcons.GiPlantSeed />, link: "/plants" },
     WaterPHLevel: { index: 2, icon: <OpacityIcon />, link: "/waterPhLevel" },
     LightMeter: { index: 3, icon: <LightbulbIcon />, link: "/lightMeter" },
@@ -80,12 +81,17 @@ function ResponsiveDrawerComp(props) {
     </div>
   );
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("userID");
+    sessionStorage.setItem("refreshLogin", "true");
+    navigate("/");
+  };
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex"}}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -104,11 +110,17 @@ function ResponsiveDrawerComp(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: "left"}}>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, textAlign: "left" }}
+            >
               <img alt="Binhi Icon" src={binhiIcon} />
               BINHI
             </Typography>
-            <Button color="inherit">Logout</Button>
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
           </Toolbar>
         </AppBar>
         <Box
