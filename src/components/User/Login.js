@@ -1,6 +1,6 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
   Alert,
   Avatar,
@@ -18,7 +18,7 @@ import {
   Paper,
   TextField,
   ThemeProvider,
-  Typography
+  Typography,
 } from "@mui/material";
 import bcrypt from "bcryptjs";
 import { getDatabase, onValue, ref } from "firebase/database";
@@ -98,12 +98,13 @@ const Login = () => {
       setTimeout(() => {
         setShowAlert(false);
       }, 7000);
+
+      return null;
     }
 
     const salt = userInDB.salt;
     const hashedPassword = bcrypt.hashSync(data.get("password"), salt);
-    console.log("hash pass ", hashedPassword);
-    console.log("passs ", userInDB.password);
+
     if (hashedPassword !== userInDB.password) {
       setSignUpResult("error");
       setAlertMessage("Invalid User ID or Password");
@@ -112,6 +113,8 @@ const Login = () => {
       setTimeout(() => {
         setShowAlert(false);
       }, 7000);
+
+      return null;
     }
 
     setUserIDError(false);
@@ -120,7 +123,7 @@ const Login = () => {
 
     sessionStorage.setItem("userID", data.get("userID"));
     sessionStorage.setItem("refreshHomePage", "true");
-    // navigate("/home");
+    navigate("/home");
   };
 
   function validateForm(data) {
@@ -208,11 +211,13 @@ const Login = () => {
               noValidate
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
-              >
+            >
               {showAlert && (
                 <>
-                  <Alert sx={{margin: "normal"}} severity={signUpResult}>{alertMessage}</Alert>
-                  <br/>
+                  <Alert sx={{ margin: "normal" }} severity={signUpResult}>
+                    {alertMessage}
+                  </Alert>
+                  <br />
                 </>
               )}
               <TextField
@@ -227,13 +232,19 @@ const Login = () => {
                 error={userIDError}
                 helperText={userIDErrorText}
               />
-              <FormControl fullWidth sx={{ margin: "normal", marginTop: "10px"}} variant="outlined">
-                <InputLabel htmlFor="password" error={passwordError}>Password</InputLabel>
+              <FormControl
+                fullWidth
+                sx={{ margin: "normal", marginTop: "10px" }}
+                variant="outlined"
+              >
+                <InputLabel htmlFor="password" error={passwordError}>
+                  Password
+                </InputLabel>
                 <OutlinedInput
                   id="password"
                   name="password"
                   error={passwordError}
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -258,7 +269,7 @@ const Login = () => {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs sx={{textAlign: "left"}}>
+                <Grid item xs sx={{ textAlign: "left" }}>
                   <Link href="/forgot" variant="body2">
                     Forgot password?
                   </Link>

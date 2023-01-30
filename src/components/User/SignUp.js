@@ -35,6 +35,9 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [hasPasswordError, setHasPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [hasConfirmPasswordError, setHasConfirmPasswordError] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [registrationResult, setRegistrationResult] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -86,7 +89,21 @@ const SignUp = () => {
     }
   };
 
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+    if (event.target.value === "" || event.target.value === null) {
+      setHasConfirmPasswordError(true);
+    } else if (event.target.value.length < 8) {
+      setHasConfirmPasswordError(true);
+    } else {
+      setHasConfirmPasswordError(false);
+    }
+  };
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -110,6 +127,8 @@ const SignUp = () => {
         "Invalid User ID. Make sure that there are no special characters in your chosen User ID."
       );
       setShowAlert(true);
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+
       clearInputFields();
       setTimeout(() => {
         setShowAlert(false);
@@ -123,6 +142,8 @@ const SignUp = () => {
       setAlertMessage("Invalid Password");
       setShowAlert(true);
       clearInputFields();
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+
       setTimeout(() => {
         setShowAlert(false);
       }, 7000);
@@ -139,6 +160,26 @@ const SignUp = () => {
       setAlertMessage("The inputted User ID is already in use.");
       setShowAlert(true);
       clearInputFields();
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 7000);
+
+      return null;
+    }
+
+    const isPasswordMismatched = password !== confirmPassword;
+
+    if (isPasswordMismatched) {
+      setRegistrationResult("error");
+      setAlertMessage(
+        "Invalid Password. Make sure it matches with the Confirm Password field."
+      );
+      setShowAlert(true);
+      clearInputFields();
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+
       setTimeout(() => {
         setShowAlert(false);
       }, 7000);
@@ -195,6 +236,7 @@ const SignUp = () => {
     setSecQstn("");
     setUserID("");
     setPassword("");
+    setConfirmPassword("");
   }
 
   return (
@@ -344,6 +386,41 @@ const SignUp = () => {
                         </InputAdornment>
                       }
                       label="Password"
+                    />
+                  </FormControl>
+                  <br></br>
+                  <br></br>
+                  <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+                    <InputLabel
+                      error={hasConfirmPasswordError}
+                      htmlFor="outlined-adornment-password"
+                    >
+                      Confirm Password
+                    </InputLabel>
+                    <OutlinedInput
+                      required
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      error={hasConfirmPasswordError}
+                      onChange={handleConfirmPasswordChange}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowConfirmPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showConfirmPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="Confirm Password"
                     />
                   </FormControl>
                   <br></br>
