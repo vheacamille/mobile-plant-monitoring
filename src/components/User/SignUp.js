@@ -1,4 +1,5 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Alert,
   Box,
@@ -16,11 +17,11 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import bcrypt from "bcryptjs";
 import { getDatabase, onValue, ref, set } from "firebase/database";
 import { useState } from "react";
-import firebaseDb from "../Database/firebaseDbConfig";
-import bcrypt from "bcryptjs";
 import { useNavigate } from "react-router-dom";
+import firebaseDb from "../Database/firebaseDbConfig";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -107,6 +108,12 @@ const SignUp = () => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const handleClickReturnToSignIn = (event) => {
+    event.preventDefault();
+
+    navigate("/login");
   };
 
   const handleSubmit = async (e) => {
@@ -435,7 +442,7 @@ const SignUp = () => {
                   </Typography>
                   <br></br>
                   <Button
-                    size="small"
+                    size="large"
                     variant="contained"
                     color="secondary"
                     fullWidth={true}
@@ -443,6 +450,15 @@ const SignUp = () => {
                     onClick={handleSubmit}
                   >
                     Sign Up
+                  </Button>
+                  <Button
+                    size="small"
+                    color="secondary"
+                    startIcon={<ArrowBackIcon />}
+                    sx={{ paddingTop: "20px" }}
+                    onClick={handleClickReturnToSignIn}
+                  >
+                    Sign in instead
                   </Button>
                 </ThemeProvider>
               </CardContent>
