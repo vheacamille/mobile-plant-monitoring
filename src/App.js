@@ -13,6 +13,7 @@ import Header from "./components/User/Header";
 import SignUp from "./components/User/SignUp";
 import Login from "./components/User/Login";
 import ForgotPassword from "./components/User/ForgotPassword";
+import ProtectedRoutes from "./components/Routes/ProtectedRoutes";
 
 function App() {
   return (
@@ -29,22 +30,25 @@ function App() {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/forgot" element={<ForgotPassword />} />
           <Route exact path="/" element={<Login />} />
-          <Route exact path="/home" element={<Home />} />
-          <Route exact path="/addPlant" element={<AddPlant />} />
-          <Route exact path="/plants" element={<Plants />} />
-          <Route
-            exact
-            path="/plantDetails/:plantName"
-            element={<PlantDetails />}
-          />
-          <Route
-            exact
-            path="/modifyPlant/:plantName"
-            element={<ModifyPlant />}
-          />
-          <Route exact path="/waterPhLevel" element={<WaterPHLevel />} />
-          <Route exact path="/lightMeter" element={<LightMeter />} />
-          <Route exact path="/history" element={<History />} />
+
+          <Route element={<ProtectedRoutes />}>
+            <Route exact path="/home" element={<Home />} />
+            <Route exact path="/addPlant" element={<AddPlant />} />
+            <Route exact path="/plants" element={<Plants />} />
+            <Route
+              exact
+              path="/plantDetails/:plantName"
+              element={<PlantDetails />}
+            />
+            <Route
+              exact
+              path="/modifyPlant/:plantName"
+              element={<ModifyPlant />}
+            />
+            <Route exact path="/waterPhLevel" element={<WaterPHLevel />} />
+            <Route exact path="/lightMeter" element={<LightMeter />} />
+            <Route exact path="/history" element={<History />} />
+          </Route>
         </Routes>
       </div>
     </Router>
