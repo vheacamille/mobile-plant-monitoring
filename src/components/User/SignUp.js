@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import bcrypt from "bcryptjs";
 import { getDatabase, onValue, ref, set } from "firebase/database";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import firebaseDb from "../Database/firebaseDbConfig";
 
@@ -42,6 +42,13 @@ const SignUp = () => {
   const [registrationResult, setRegistrationResult] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [userIdsInDb, setUserIdsInDb] = useState(null);
+
+  useEffect(() => {
+    if (userIdsInDb === null) {
+      getAllUsers();
+    }
+  });
 
   const handleFirstNameChange = (event) => {
     setFirstName(event.target.value);
@@ -119,8 +126,6 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const users = await getAllUsers();
-
     const isValidUserID = /^[a-z0-9]+$/i.test(userID);
 
     if (
@@ -158,7 +163,7 @@ const SignUp = () => {
       return null;
     }
 
-    const isUserIDTaken = users.find((nameInDb) => {
+    const isUserIDTaken = userIdsInDb.find((nameInDb) => {
       return nameInDb.toLowerCase() === userID.toLowerCase();
     });
 
@@ -231,10 +236,9 @@ const SignUp = () => {
       if (snapshot.exists()) {
         let dbValues = snapshot.val();
         userIDs = Object.keys(dbValues);
+        setUserIdsInDb(userIDs);
       }
     });
-
-    return userIDs;
   };
 
   function clearInputFields() {

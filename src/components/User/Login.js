@@ -90,7 +90,7 @@ const Login = () => {
 
     validateForm(data);
 
-    if (userInDB === null) {
+    if (userInDB === null || userInDB === undefined) {
       setSignUpResult("error");
       setAlertMessage("Invalid User ID or Password");
       setShowAlert(true);

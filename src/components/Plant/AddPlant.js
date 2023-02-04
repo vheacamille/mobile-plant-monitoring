@@ -102,7 +102,7 @@ const AddPlant = () => {
     if (isPastHarvestDate) {
       setAddResult("error");
       setAlertMessage(
-        "Cannot add plant because it is past its expected harvest date."
+        "Cannot add plant because of the invalid expected harvest date."
       );
       setShowAlert(true);
       clearInputFields();
@@ -154,8 +154,8 @@ const AddPlant = () => {
     let dateToRemovePlant = new Date(expectedHarvestDate);
 
     return (
-      dateToday.getFullYear() === dateToRemovePlant.getFullYear() &&
-      dateToday.getMonth() === dateToRemovePlant.getMonth()
+      dateToday.getFullYear() >= dateToRemovePlant.getFullYear() ||
+      dateToday.getMonth() >= dateToRemovePlant.getMonth()
     );
   }
 
