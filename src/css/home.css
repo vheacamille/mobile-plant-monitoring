@@ -1,18 +1,6 @@
-.home {
-  background-image: url('../images/GardenBG.jpg');
-  background-size: 100% 100% cover;
-  background-repeat: no-repeat;
-  object-position: 50%;
+.garden-carousel {
   width: 100%;
-  height: 2008px;
-  border: 2px solid;
-  position: left;
-  color: pink;
+  height: 70vh;
+  object-fit: cover;
+  object-position: 50%;
 }
-
-.home>h1 {
-  color: white;
-  text-shadow: 7px 7px 7px black;
-  font-size: 50px;
-}
-

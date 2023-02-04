@@ -9,30 +9,46 @@ import History from "./pages/History";
 import PlantDetails from "./components/Plant/PlantDetails";
 import AddPlant from "./components/Plant/AddPlant";
 import ModifyPlant from "./components/Plant/ModifyPlant";
+import Header from "./components/User/Header";
+import SignUp from "./components/User/SignUp";
+import Login from "./components/User/Login";
+import ForgotPassword from "./components/User/ForgotPassword";
+import ProtectedRoutes from "./components/Routes/ProtectedRoutes";
 
 function App() {
   return (
-    <Router>
+    <Router forceRefresh={true}>
       <div className="App">
-        <ResponsiveDrawerComp></ResponsiveDrawerComp>
+        {sessionStorage.getItem("userID") === null ? (
+          <Header></Header>
+        ) : (
+          <ResponsiveDrawerComp></ResponsiveDrawerComp>
+        )}
 
         <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/addPlant" element={<AddPlant />} />
-          <Route exact path="/plants" element={<Plants />} />
-          <Route
-            exact
-            path="/plantDetails/:plantName"
-            element={<PlantDetails />}
-          />
-          <Route
-            exact
-            path="/modifyPlant/:plantName"
-            element={<ModifyPlant />}
-          />
-          <Route exact path="/waterPhLevel" element={<WaterPHLevel />} />
-          <Route exact path="/lightMeter" element={<LightMeter />} />
-          <Route exact path="/history" element={<History />} />
+          <Route exact path="/signUp" element={<SignUp />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/forgot" element={<ForgotPassword />} />
+          <Route exact path="/" element={<Login />} />
+
+          <Route element={<ProtectedRoutes />}>
+            <Route exact path="/home" element={<Home />} />
+            <Route exact path="/addPlant" element={<AddPlant />} />
+            <Route exact path="/plants" element={<Plants />} />
+            <Route
+              exact
+              path="/plantDetails/:plantName"
+              element={<PlantDetails />}
+            />
+            <Route
+              exact
+              path="/modifyPlant/:plantName"
+              element={<ModifyPlant />}
+            />
+            <Route exact path="/waterPhLevel" element={<WaterPHLevel />} />
+            <Route exact path="/lightMeter" element={<LightMeter />} />
+            <Route exact path="/history" element={<History />} />
+          </Route>
         </Routes>
       </div>
     </Router>

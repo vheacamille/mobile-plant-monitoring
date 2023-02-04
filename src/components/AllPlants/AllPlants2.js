@@ -111,6 +111,7 @@ const AllPlants2 = () => {
           isAvailableForMonitoring: element.isAvailableForMonitoring,
           dateAdded: dateArchived.toUTCString(),
           reason: "Past expected harvest date",
+          deletedBy: "BINHI System",
         });
       }
     };
@@ -215,6 +216,7 @@ const AllPlants2 = () => {
       isAvailableForMonitoring: plantToRemove.isAvailableForMonitoring,
       dateAdded: dateArchived.toUTCString(),
       reason,
+      deletedBy: sessionStorage.getItem("userID"),
     });
   }
 

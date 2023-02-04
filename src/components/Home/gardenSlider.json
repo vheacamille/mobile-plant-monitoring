@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Grow and Nurture",
+    "quote": "\"Don't judge each day by the harvest you reap but by the seeds that you plant.\"",
+    "author": "- Robert Louis Stevenson",
+    "image": "/images/GardenCarousel1.jpg"
+  },
+  {
+    "name": "Track and Monitor",
+    "quote": "\"Always do your best. What you plant now, you will harvest later.\"",
+    "author": "- Og Mandino",
+    "image": "/images/GardenCarousel2.jpg"
+  },
+  {
+    "name": "Join Our Community",
+    "quote": "\"A beautiful plant is like having a friend around the house.\"",
+    "author": "- Beth Ditto",
+    "image": "/images/GardenCarousel3.jpg"
+  },
+  {
+    "name": "Help Grow Our Community",
+    "quote": "\"You can plant a dream.\"",
+    "author": "- Anne Campbell",
+    "image": "/images/GardenCarousel4.jpg"
+  }
+]
