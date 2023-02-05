@@ -1,4 +1,4 @@
-npmimport "./App.css";
+import "./App.css";
 import ResponsiveDrawerComp from "./components/Drawer/ResponsiveDrawerComp";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";

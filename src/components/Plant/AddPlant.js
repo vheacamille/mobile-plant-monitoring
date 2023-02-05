@@ -154,8 +154,9 @@ const AddPlant = () => {
     let dateToRemovePlant = new Date(expectedHarvestDate);
 
     return (
-      dateToday.getFullYear() >= dateToRemovePlant.getFullYear() ||
-      dateToday.getMonth() >= dateToRemovePlant.getMonth()
+      dateToday.getFullYear() > dateToRemovePlant.getFullYear() ||
+      (dateToday.getFullYear() === dateToRemovePlant.getFullYear() &&
+        dateToday.getMonth() >= dateToRemovePlant.getMonth())
     );
   }
 
