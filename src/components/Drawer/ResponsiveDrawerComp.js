@@ -24,6 +24,9 @@ import * as React from "react";
 import * as GiIcons from "react-icons/gi";
 import { Link, useNavigate } from "react-router-dom";
 import binhiIcon from "./imgs/binhi-icon-sprout.png";
+import { useEffect } from "react";
+import { getDatabase, ref, onValue } from "firebase/database";
+import firebaseDb from "../Database/firebaseDbConfig";
 
 const drawerWidth = 240;
 
@@ -32,6 +35,27 @@ function ResponsiveDrawerComp(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [tabIndex, setTabIndex] = React.useState(-1);
+  const [wateredPlantsList, setWateredPlantsList] = React.useState(null);
+  const [notificationCount, setNotificationCount] = React.useState(0);
+
+  useEffect(() => {
+    const getNotifications = async () => {
+      const db = getDatabase(firebaseDb);
+      const notifsRef = await ref(db, "/FirebaseNotifications");
+
+      onValue(notifsRef, (snapshot) => {
+        if (
+          snapshot.exists() &&
+          JSON.stringify(snapshot.val()) !== JSON.stringify(wateredPlantsList)
+        ) {
+          setWateredPlantsList(snapshot.val());
+          console.log(snapshot.val());
+        }
+      });
+    };
+
+    getNotifications();
+  });
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
