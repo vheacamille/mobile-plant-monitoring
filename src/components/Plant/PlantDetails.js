@@ -12,6 +12,7 @@ import {
   BasicCircle,
   HumidityDropPercent,
   TempLines,
+  WaterPlant,
 } from "react-sensor-meters";
 import { getDatabase, ref, onValue } from "firebase/database";
 import firebaseDb from "../Database/firebaseDbConfig";
@@ -21,6 +22,8 @@ const PlantDetails = () => {
   const [humidity, setHumidity] = useState("0");
   const [temperature, setTemperature] = useState("0");
   const [moisture, setMoisture] = useState("0");
+  const [expectedPhLevel, setExpectedPhLevel] = useState("0");
+  const [expectedMoisture, setExpectedMoisture] = useState("0");
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
 
@@ -74,11 +77,29 @@ const PlantDetails = () => {
           setMoisture(parseFloat("0"));
         }
       });
+
+      sessionStorage.setItem("moisturePechay", moisture);
+    };
+
+    const getExpectedValues = async () => {
+      const db = getDatabase(firebaseDb);
+      const plantRef = await ref(db, "/FirebaseRegisteredPlants/" + plantName);
+      onValue(plantRef, (snapshot) => {
+        if (snapshot.exists()) {
+          let plant = snapshot.val();
+          setExpectedPhLevel(parseFloat(plant.expectedPhLevel));
+          setExpectedMoisture(parseFloat(plant.expectedMoisture));
+        } else {
+          setExpectedPhLevel(parseFloat("0"));
+          setExpectedMoisture(parseFloat("0"));
+        }
+      });
     };
 
     getHumidity();
     getTemperature();
     getMoisture();
+    getExpectedValues();
 
     setOpen(plantName !== "Pechay");
   }, []);
@@ -112,6 +133,91 @@ const PlantDetails = () => {
             <Typography gutterBottom variant="h6" component="div">
               {plantName} Details
             </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={4} xl={3}>
+            <Card />
+          </Grid>
+          <Grid item xs={2} sm={3} xl={4}>
+            <Card />
+          </Grid>
+          <Grid item xs={4} sm={4} xl={3} zeroMinWidth>
+            <div
+              key={humidity}
+              style={{
+                margin: "auto",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <WaterPlant
+                data={expectedPhLevel}
+                topEndDataLimit={100}
+                animate={false}
+                neon={""}
+                fillColor={"blue"}
+                backFillColor={"green"}
+                valueColor={"blue"}
+                labelColor={"blue"}
+                cardColor={"white"}
+                dotColor={"teal"}
+                hover={false}
+                gaugeSize={"small"}
+                labelText={""}
+              />
+            </div>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardActionArea>
+                <CardContent>
+                  <Typography gutterBottom variant="h7" component="div">
+                    <strong>Expected pH Level</strong>
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+          <Grid item xs={5} sm={4} xl={2} zeroMinWidth>
+            <div
+              key={expectedMoisture}
+              style={{
+                margin: "auto",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <BasicCircle
+                data={expectedMoisture}
+                topEndDataLimit={100}
+                animate={true}
+                neon={""}
+                fillColor={"steelblue"}
+                backFillColor={"lightcyan"}
+                valueColor={"black"}
+                labelColor={"darkgreen"}
+                cardColor={"white"}
+                dotColor={"teal"}
+                hover={false}
+                gaugeSize={"small"}
+                labelText={""}
+                highFillColor={"dodgerblue"}
+                highFillThreshold={80}
+              />
+            </div>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardActionArea>
+                <CardContent>
+                  <Typography gutterBottom variant="h7" component="div">
+                    <strong>Expected Moisture %</strong>
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={4} xl={3}>
+            <Card />
+          </Grid>
+          <Grid item xs={2} sm={3} xl={4}>
+            <Card />
           </Grid>
           <Grid item xs={12} sm={4} xl={3}>
             <Card />

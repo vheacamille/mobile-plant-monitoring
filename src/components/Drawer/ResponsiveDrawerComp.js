@@ -25,7 +25,7 @@ import * as GiIcons from "react-icons/gi";
 import { Link, useNavigate } from "react-router-dom";
 import binhiIcon from "./imgs/binhi-icon-sprout.png";
 import { useEffect } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set } from "firebase/database";
 import firebaseDb from "../Database/firebaseDbConfig";
 
 const drawerWidth = 240;
@@ -35,27 +35,6 @@ function ResponsiveDrawerComp(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [tabIndex, setTabIndex] = React.useState(-1);
-  const [wateredPlantsList, setWateredPlantsList] = React.useState(null);
-  const [notificationCount, setNotificationCount] = React.useState(0);
-
-  useEffect(() => {
-    const getNotifications = async () => {
-      const db = getDatabase(firebaseDb);
-      const notifsRef = await ref(db, "/FirebaseNotifications");
-
-      onValue(notifsRef, (snapshot) => {
-        if (
-          snapshot.exists() &&
-          JSON.stringify(snapshot.val()) !== JSON.stringify(wateredPlantsList)
-        ) {
-          setWateredPlantsList(snapshot.val());
-          console.log(snapshot.val());
-        }
-      });
-    };
-
-    getNotifications();
-  });
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -67,15 +46,6 @@ function ResponsiveDrawerComp(props) {
 
   const listIcons = {
     Home: { index: 0, icon: <HomeIcon />, link: "/home" },
-    Notifications: {
-      index: 1,
-      icon: (
-        <Badge color="secondary" badgeContent={2}>
-          <NotificationsIcon />{" "}
-        </Badge>
-      ),
-      link: "/notifications",
-    },
     Plants: { index: 2, icon: <GiIcons.GiPlantSeed />, link: "/plants" },
     WaterPHLevel: { index: 3, icon: <OpacityIcon />, link: "/waterPhLevel" },
     LightMeter: { index: 4, icon: <LightbulbIcon />, link: "/lightMeter" },
@@ -87,31 +57,29 @@ function ResponsiveDrawerComp(props) {
       <Toolbar />
       <Divider />
       <List>
-        {[
-          "Home",
-          "Notifications",
-          "Plants",
-          "Water PH Level",
-          "Light Meter",
-          "History",
-        ].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton
-              component={Link}
-              to={listIcons[text.replace(/\s/g, "")].link}
-              selected={tabIndex === listIcons[text.replace(/\s/g, "")].index}
-              onClick={(event) => {
-                handleTabIndex(event, listIcons[text.replace(/\s/g, "")].index);
-              }}
-              disableRipple={true}
-            >
-              <ListItemIcon>
-                {listIcons[text.replace(/\s/g, "")].icon}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {["Home", "Plants", "Water PH Level", "Light Meter", "History"].map(
+          (text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton
+                component={Link}
+                to={listIcons[text.replace(/\s/g, "")].link}
+                selected={tabIndex === listIcons[text.replace(/\s/g, "")].index}
+                onClick={(event) => {
+                  handleTabIndex(
+                    event,
+                    listIcons[text.replace(/\s/g, "")].index
+                  );
+                }}
+                disableRipple={true}
+              >
+                <ListItemIcon>
+                  {listIcons[text.replace(/\s/g, "")].icon}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          )
+        )}
       </List>
       <Divider />
     </div>

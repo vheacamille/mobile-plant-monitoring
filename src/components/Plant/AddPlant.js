@@ -6,6 +6,8 @@ import {
   CardContent,
   Checkbox,
   createTheme,
+  Dialog,
+  DialogContent,
   FormControl,
   FormControlLabel,
   Grid,
@@ -30,7 +32,10 @@ const AddPlant = () => {
   const [expectedHarvestDate, setExpectedHarvestDate] = useState(
     dayjs(new Date())
   );
+  const [expectedPhLevel, setExpectedPhLevel] = useState(0);
+  const [expectedMoisture, setExpectedMoisture] = useState(0);
   const [areSensorsReady, setAreSensorsReady] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [addResult, setAddResult] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -63,6 +68,22 @@ const AddPlant = () => {
     setAreSensorsReady(event.target.checked);
   };
 
+  const handleExpectedPhLevelChange = (event) => {
+    setExpectedPhLevel(event.target.value);
+  };
+
+  const handleExpectedMoistureChange = (event) => {
+    setExpectedMoisture(event.target.value);
+  };
+
+  const handleClickDialogOpen = (event) => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = (event) => {
+    setDialogOpen(false);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -81,9 +102,12 @@ const AddPlant = () => {
       return null;
     }
 
-    let isPlantNameTaken = plants.find((nameInDb) => {
-      return nameInDb.toLowerCase() === name.toLowerCase();
-    });
+    let isPlantNameTaken =
+      plants === null || JSON.stringify(plants) === "[null]"
+        ? false
+        : plants.find((nameInDb) => {
+            return nameInDb.toLowerCase() === name.toLowerCase();
+          });
 
     if (isPlantNameTaken) {
       setAddResult("error");
@@ -128,6 +152,8 @@ const AddPlant = () => {
       name,
       datePlanted: plantedDateTime.toUTCString(),
       expectedHarvestDate: expectedHarvestDateTime.toUTCString(),
+      expectedPhLevel,
+      expectedMoisture,
       link: areSensorsReady ? "/plantDetails/" + name : "#",
       isAvailableForMonitoring: areSensorsReady,
     });
@@ -146,6 +172,8 @@ const AddPlant = () => {
     setName("");
     setPlantedDate(dayjs(new Date()));
     setExpectedHarvestDate(dayjs(new Date()));
+    setExpectedPhLevel(0);
+    setExpectedMoisture(0);
     setAreSensorsReady(false);
   }
 
@@ -246,16 +274,98 @@ const AddPlant = () => {
                     />
                   </LocalizationProvider>
                   <br></br>
+                  <br></br>
+                  <FormControl>
+                    <InputLabel required htmlFor="component-outlined">
+                      Expected pH Level
+                    </InputLabel>
+                    <OutlinedInput
+                      required
+                      id="expectedPhLevel"
+                      type="number"
+                      value={expectedPhLevel}
+                      onChange={handleExpectedPhLevelChange}
+                      label="Expected pH Level"
+                    />
+                  </FormControl>
+                  <br></br>
+                  <br></br>
+                  <FormControl>
+                    <InputLabel required htmlFor="component-outlined">
+                      Expected Moisture (%)
+                    </InputLabel>
+                    <OutlinedInput
+                      required
+                      id="expectedMoisture"
+                      type="number"
+                      value={expectedMoisture}
+                      onChange={handleExpectedMoistureChange}
+                      label="Expected Moisture"
+                    />
+                  </FormControl>
+                  <br></br>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        disabled
                         checked={areSensorsReady}
                         onChange={handleSensorsReadyChange}
                       />
                     }
                     label="Sensors Ready?"
                   />
+                  <br></br>
+                  <br></br>
+                  <Button
+                    color="inherit"
+                    variant="outlined"
+                    size="small"
+                    sx={{ fontSize: 10 }}
+                    onClick={handleClickDialogOpen}
+                  >
+                    Click here to view the expected ph level and moisture for
+                    your plant.
+                  </Button>
+                  <Dialog onClose={handleDialogClose} open={dialogOpen}>
+                    <DialogContent dividers>
+                      <Typography gutterBottom>
+                        <strong>Expected ph Level and Moisture List</strong>
+                      </Typography>
+                      <Typography gutterBottom>
+                        Pechay: (ph Level = 5.4 to 6.7, moisture = 30%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Mustasa: (ph Level = 6.0 to 6.8, moisture = 40%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Okra (ph Level = 5.8 - 6.8, moisture = 30%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Sili (ph Level = 5.5 - 6.8, moisture = 60%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Talong (ph Level = 5.5 - 6.8, moisture = 40%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Sitaw (ph Level = 5.5 - 6.6, moisture = 40%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Kamatis (ph Level = 5.8 - 6.5, moisture = 75%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Upo (ph Level = 6.3, moisture = 40%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Ampalaya (ph Level = 6.0 - 6.7, moisture = 80%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Lettuce (ph Level = 6.0 - 6.5, moisture = 60%)
+                      </Typography>
+                      <Typography gutterBottom>
+                        Kalabasa (ph Level = 6.0 - 6.7, moisture = 50%)
+                      </Typography>
+                    </DialogContent>
+                  </Dialog>
+                  <br></br>
                   <br></br>
                   <br></br>
                   <Button

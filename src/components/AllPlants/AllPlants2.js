@@ -11,11 +11,16 @@ import {
   ThemeProvider,
   ButtonGroup,
   Alert,
+  Badge,
+  Dialog,
+  DialogContent,
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
+import StorageIcon from "@mui/icons-material/Storage";
 import { Link } from "react-router-dom";
 import plant from "./imgs/real-display-plant.png";
 import seed from "./imgs/seed.png";
@@ -26,6 +31,7 @@ import DeleteModal from "./DeleteModal";
 
 const AllPlants2 = () => {
   const [plants, setPlants] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [plantNamesToRemove, setPlantNamesToRemove] = useState([]);
   const [archivedPlants, setArchivedPlants] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -176,6 +182,14 @@ const AllPlants2 = () => {
     }
   }
 
+  const handleClickDialogOpen = (event) => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = (event) => {
+    setDialogOpen(false);
+  };
+
   async function deletePlant(plantToRemove, reason, setCloseModal) {
     const db = getDatabase(firebaseDb);
 
@@ -259,7 +273,7 @@ const AllPlants2 = () => {
                 </Grid>
               )}
 
-              <Grid item xs={5} sm={4} zeroMinWidth>
+              <Grid item xs={5} sm={4} zeroMinWidth key={item.name}>
                 <Card
                   sx={{ maxWidth: 345 }}
                   onMouseDown={(e) => {
@@ -363,6 +377,33 @@ const AllPlants2 = () => {
                               size="small"
                               variant="outlined"
                               color="secondary"
+                              state={{ plant: item }}
+                              disabled={
+                                "longpress" === action ||
+                                (item.name.toLowerCase() === "pechay" &&
+                                  parseFloat(item.expectedMoisture) <=
+                                    parseFloat(item.Moisture)) ||
+                                parseFloat(item.Moisture) === NaN
+                              }
+                              onClick={handleClickDialogOpen}
+                            >
+                              <Badge
+                                badgeContent={
+                                  item.name.toLowerCase() === "pechay" &&
+                                  parseFloat(item.expectedMoisture) >
+                                    parseFloat(item.Moisture)
+                                    ? 1
+                                    : 0
+                                }
+                                color="error"
+                              >
+                                <InvertColorsIcon />
+                              </Badge>
+                            </Button>
+                            <Button
+                              size="small"
+                              variant="outlined"
+                              color="secondary"
                               component={Link}
                               to={item.link}
                               disabled={
@@ -383,6 +424,20 @@ const AllPlants2 = () => {
                               <BorderColorIcon />
                             </Button>
                           </ButtonGroup>
+                          <Dialog onClose={handleDialogClose} open={dialogOpen}>
+                            <DialogContent dividers>
+                              <Typography gutterBottom>
+                                <strong>
+                                  Reminder! {item.name.toUpperCase()} needs to
+                                  be watered.
+                                </strong>
+                              </Typography>
+                              <Typography gutterBottom>
+                                {item.name.toUpperCase()}'s moisture is below
+                                the expected moisture set for this plant.
+                              </Typography>
+                            </DialogContent>
+                          </Dialog>
                         </ThemeProvider>
                       </CardActions>
                     </>
