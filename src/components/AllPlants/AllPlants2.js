@@ -381,8 +381,7 @@ const AllPlants2 = () => {
                               disabled={
                                 "longpress" === action ||
                                 (item.name.toLowerCase() === "pechay" &&
-                                  parseFloat(item.expectedMoisture) <=
-                                    parseFloat(item.Moisture)) ||
+                                  parseFloat(item.Moisture)) >= 20 ||
                                 parseFloat(item.Moisture) === NaN
                               }
                               onClick={handleClickDialogOpen}
@@ -390,8 +389,7 @@ const AllPlants2 = () => {
                               <Badge
                                 badgeContent={
                                   item.name.toLowerCase() === "pechay" &&
-                                  parseFloat(item.expectedMoisture) >
-                                    parseFloat(item.Moisture)
+                                  parseFloat(item.Moisture) < 20
                                     ? 1
                                     : 0
                                 }

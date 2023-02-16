@@ -5,8 +5,13 @@ import {
   CardContent,
   Grid,
   Modal,
+  Rating,
+  styled,
   Typography,
 } from "@mui/material";
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+import SentimentSatisfiedIcon from "@mui/icons-material/SentimentSatisfied";
+import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
 import { useState, useEffect } from "react";
 import {
   BasicCircle,
@@ -22,6 +27,8 @@ const PlantDetails = () => {
   const [humidity, setHumidity] = useState("0");
   const [temperature, setTemperature] = useState("0");
   const [moisture, setMoisture] = useState("0");
+  const [moistureRemarks, setMoistureRemarks] = useState("");
+  const [moistureRemarksValue, setMoistureRemarksValue] = useState(0);
   const [expectedPhLevel, setExpectedPhLevel] = useState("0");
   const [expectedMoisture, setExpectedMoisture] = useState("0");
   const [open, setOpen] = useState(false);
@@ -72,7 +79,19 @@ const PlantDetails = () => {
       );
       onValue(moistureRef, (snapshot) => {
         if (snapshot.exists()) {
-          setMoisture(parseFloat(JSON.stringify(snapshot.val())));
+          let currentMoisture = parseFloat(JSON.stringify(snapshot.val()));
+          setMoisture(currentMoisture);
+
+          if (currentMoisture < 20) {
+            setMoistureRemarks("BAD");
+            setMoistureRemarksValue(1);
+          } else if (currentMoisture >= 20 && currentMoisture < 30) {
+            setMoistureRemarks("FAIR");
+            setMoistureRemarksValue(2);
+          } else {
+            setMoistureRemarks("EXCELLENT");
+            setMoistureRemarksValue(3);
+          }
         } else {
           setMoisture(parseFloat("0"));
         }
@@ -339,6 +358,18 @@ const PlantDetails = () => {
                   <Typography gutterBottom variant="h7" component="div">
                     Moisture %
                   </Typography>
+                  <Typography gutterBottom variant="h7" component="div">
+                    Remarks : {moistureRemarks}
+                  </Typography>
+                  <StyledRating
+                    name="highlight-selected-only"
+                    readOnly
+                    max={3}
+                    key={moistureRemarksValue}
+                    defaultValue={moistureRemarksValue}
+                    IconContainerComponent={IconContainer}
+                    highlightSelectedOnly
+                  />
                 </CardContent>
               </CardActionArea>
             </Card>
@@ -365,5 +396,31 @@ const style = {
   border: "2px solid #000000",
   p: 4,
 };
+
+const StyledRating = styled(Rating)(({ theme }) => ({
+  "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
+    color: theme.palette.action.disabled,
+  },
+}));
+
+const customIcons = {
+  1: {
+    icon: <SentimentVeryDissatisfiedIcon color="error" />,
+    label: "Very Dissatisfied",
+  },
+  2: {
+    icon: <SentimentSatisfiedIcon color="warning" />,
+    label: "Neutral",
+  },
+  3: {
+    icon: <SentimentVerySatisfiedIcon color="success" />,
+    label: "Very Satisfied",
+  },
+};
+
+function IconContainer(props) {
+  const { value, ...other } = props;
+  return <span {...other}>{customIcons[value].icon}</span>;
+}
 
 export default PlantDetails;

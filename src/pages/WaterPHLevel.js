@@ -6,6 +6,7 @@ import firebaseDb from "../components/Database/firebaseDbConfig";
 
 const WaterPHLevel = () => {
   const [waterLevel, setWaterLevel] = useState("0");
+  const [waterLevelRemarks, setWaterLevelRemarks] = useState("");
   const [timeUpdated, setTimeUpdated] = useState(getCurrentDateAndTime());
 
   useEffect(() => {
@@ -18,8 +19,31 @@ const WaterPHLevel = () => {
       );
       onValue(waterLevelRef, (snapshot) => {
         if (snapshot.exists()) {
-          setWaterLevel(parseFloat(JSON.stringify(snapshot.val())));
+          let currentWaterLevel = parseFloat(JSON.stringify(snapshot.val()));
+          let currentWaterLevelRoundDown = Math.floor(currentWaterLevel);
+          setWaterLevel(currentWaterLevel);
           setTimeUpdated(getCurrentDateAndTime());
+
+          if (
+            currentWaterLevelRoundDown >= 1 &&
+            currentWaterLevelRoundDown <= 4
+          ) {
+            setWaterLevelRemarks("BAD");
+          } else if (
+            currentWaterLevelRoundDown >= 8 &&
+            currentWaterLevelRoundDown <= 13
+          ) {
+            setWaterLevelRemarks("BAD");
+          } else if (currentWaterLevelRoundDown > 13) {
+            setWaterLevelRemarks("BAD");
+          } else if (
+            currentWaterLevelRoundDown === 5 ||
+            currentWaterLevelRoundDown === 6
+          ) {
+            setWaterLevelRemarks("FAIR");
+          } else if (currentWaterLevelRoundDown === 7) {
+            setWaterLevelRemarks("EXCELLENT");
+          }
         } else {
           setWaterLevel(parseFloat("0"));
         }
@@ -65,6 +89,11 @@ const WaterPHLevel = () => {
             }}
           />
           <Item>Current Water PH Level (%) as of {timeUpdated} </Item>
+          <br></br>
+          <Item>
+            <strong>Remarks : {waterLevelRemarks} </strong>{" "}
+          </Item>
+          <br></br>
         </Grid>
       </Grid>
     </>
